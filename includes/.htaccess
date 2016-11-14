@@ -1,0 +1,8 @@
+
+# DO NOT REMOVE THIS LINE AND THE LINES BELOW PWPROTECTID:bJaLxo
+AuthType Basic
+AuthName "Restricted Access"
+AuthUserFile /home/apousies/public_html/includes/.htpasswd
+Require user george
+# DO NOT REMOVE THIS LINE AND THE LINES ABOVE bJaLxo:PWPROTECTID
+
