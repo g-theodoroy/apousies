@@ -15,6 +15,7 @@ isset ($_POST["fromname"]) ? $fromname = $_POST["fromname"] : $fromname = '';
 
 //echo "$host - $username - $password - $database<hr>";
 
+$errortext = null;
 
 //έλεγχος αν πήρα όλα τα στοιχεία
 if (!$host || !$username || !$password || !$database) $errortext="Ελλιπή στοιχεία. Δεν μπορώ να συνεχίσω!";
