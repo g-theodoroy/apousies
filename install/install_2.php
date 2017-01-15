@@ -280,7 +280,3 @@ if ($errortext) {
 </body>
 </html>
 
-<?php
-include '../populatedemo.php';
-?>
-
