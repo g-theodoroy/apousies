@@ -116,7 +116,7 @@
 		</div>
 		<div class="column span-4 last">
 			<div align="right">
-				<a href="mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών" >GΘ2010</a>
+				<a href="mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών" >GΘ@2017</a>
 			</div>
 		</div>
 	</div>
