@@ -10,9 +10,9 @@
 Η Διαχείριση απουσιών χρησιμοποιεί **με ευγνωμοσύνη** τις παρακάτω κλάσεις:
 - [mpdf/mpdf] (https://github.com/mpdf/mpdf)
 - [phpmailer/phpmailer] (https://github.com/phpmailer/phpmailer)
-- [league/oauth2-google] (https://github.com/league/oauth2-google)
+- [league/oauth2-google] (https://github.com/thephpleague/oauth2-google)
 - [phpoffice/phpexcel] (https://github.com/phpoffice/phpexcel)
-- [smarty/smarty] (https://github.com/smarty/smarty)
-- [pclzip/pclzip] (https://github.com/pclzip/pclzip)
+- [smarty/smarty] (https://github.com/smarty-php/smarty)
+- [pclzip/pclzip] (https://github.com/ivanlanin/pclzip)
 
 Γεώργιος Θεοδώρου
