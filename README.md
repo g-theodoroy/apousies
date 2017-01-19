@@ -8,11 +8,11 @@
 [Αναλυτικές οδηγίες] (https://github.com/g-theodoroy/apousies/blob/master/useful/odigies_apousies.pdf)
 
 Η Διαχείριση απουσιών χρησιμοποιεί τις παρακάτω κλάσεις:
-@mpdf/mpdf
-@phpmailer/phpmailer
-@league/oauth2-google
-@phpoffice/phpexcel
-@smarty/smarty
-@pclzip/pclzip
+- @mpdf/mpdf
+- @phpmailer/phpmailer
+- @league/oauth2-google
+- @phpoffice/phpexcel
+- @smarty/smarty
+- @pclzip/pclzip
 
 Γεώργιος Θεοδώρου
