@@ -17,7 +17,7 @@ isset ( $_POST ['submitBtn'] ) ? $target = $_POST ['submitBtn'] : $target = 'pri
 
 if ($protokctrl == 2) {
 	if (file_exists ( "includes/protocolapousies.inc.php" )) {
-		
+
 		// συνδέομαι με τη βάση
 		include ("includes/protocolapousies.inc.php");
 	}
@@ -25,13 +25,17 @@ if ($protokctrl == 2) {
 		// μεταβλητή για αποθήκευση των query μετά
 		$pinquery = array ();
 		// ΑΝ ΕΠΙΛΕΓΕΙ ΗΛΕΚΤΡΟΝΙΚΟ ΠΡΩΤΟΚΟΛΛΟ ΒΡΙΣΚΩ ΤΟ ΕΠΟΜΕΝ0 Α/Α ΚΑΙ ΑΡΙΘΜΟ ΠΡΩΤΟΚΟΛΛΟΥ
-		$protquery = "SELECT `id`, `ari8mosprotokolisis`, `akronimio` FROM `protokolisi` ORDER BY `id` DESC  LIMIT 1  ;";
+		$yearinusequery = "SELECT  `value` FROM `configs` where `key`='yearInUse' ;";
+		$yearinuseresult = mysqli_query ( $link, $yearinusequery );
+		$row = mysqli_fetch_assoc ( $yearinuseresult );
+		$yearinuse = ( int ) $row ["value"];
+
+		$protquery = "SELECT  `protocolnum` FROM `protocols` where `etos`=$yearinuse ORDER BY `id` DESC  LIMIT 1  ;";
 		$protresult = mysqli_query ( $link, $protquery );
 		$row = mysqli_fetch_assoc ( $protresult );
-		$newid = ( int ) $row ["id"] + 1;
-		$protok = ( int ) $row ["ari8mosprotokolisis"] + 1;
-		$akronimio = $row ["akronimio"];
-		
+		$protok = ( int ) $row ["protocolnum"] + 1;
+		echo $protok . "<hr>";
+
 		mysqli_close ( $link );
 	}
 }
@@ -66,7 +70,7 @@ $lastmonth = array (
 		"Μαΐου",
 		"Ιουνίου",
 		"Ιουλίου",
-		"Αυγούστου" 
+		"Αυγούστου"
 );
 $lastmonthaitiatiki = array (
 		"Σεπτέμβριο",
@@ -80,7 +84,7 @@ $lastmonthaitiatiki = array (
 		"Μάιο",
 		"Ιούνιο",
 		"Ιούλιο",
-		"Αύγουστο" 
+		"Αύγουστο"
 );
 $thisday = intval ( substr ( $lastdate, 6, 2 ) );
 $thismonth = $monthindex = intval ( substr ( $lastdate, 4, 2 ) );
@@ -101,7 +105,7 @@ $monthindex < 8 ? $lastmonthindex = ($monthindex + 12) % 9 : $lastmonthindex = $
 
 if (intval ( substr ( $lastdate, 6, 2 ) ) < 10 && $lastmonthindex > 0)
 	$lastmonthindex --;
-	
+
 	// συνδέομαι με τη βάση
 include ("includes/dbinfo.inc.php");
 $query = "SELECT `email` FROM `users` WHERE `username` = '$parent' ;";
@@ -397,22 +401,21 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	
 	if ($protokctrl == 2) {
 		$protocolyear = date ( "Y" );
-		$protocoldate = date ( "Y-m-d" );
-		
+		$protocoldate = date ( "Ymd" );
+
 		$studentsdata [11] == "Α" ? $strprot0 = "ΜΑΘΗΤΗΣ " : $strprot0 = "ΜΑΘΗΤΡΙΑ ";
 		$strprot0 .= $tmima . " ΤΑΞΗΣ " . $studentsdata [0] . " " . $studentsdata [1];
 		$strkid = $studentsdata [5] . " " . $studentsdata [4];
-		
-		$protocolquery = "INSERT INTO `protokolisi` 
-            (`id`, `ari8mosprotokolisis`, `8ema`, `etos`, `entryby`, `imerominiaparalabis`, `in_ari8mos`,
-            `in_toposekdosis`, `in_imerominia`, `in_arxiekdosis`, `in_perilipsi`, `in_paraliptis`, `in_koinopoiisi`,
-            `out_apey8inetai`, `out_koinopoisi`, `out_perilipsi`, `out_hmeriminia`, `le3ikleidi`, `diekperaivsi`, 
-            `diekperaivsidate`, `fakelos`, `fakelosdate`, `paratiriseis`, `editdate`, `akronimio`, `sxetika`) VALUES 
-            ($newid, $protok, 'ΕΞΕΡΧΟΜΕΝΟ', '$protocolyear', $entryby, '$protocoldate', '', '$city', '0000-00-00', '$school', 
-            '$strprot0', '$strkid', '', '$strkid', '', 'ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ', '$protocoldate', '', '$diekperaivsi', 
-             '0000-00-00', 'Φ.$tmima', '0000-00-00', '', '0000-00-00', '$akronimio', '') ;
-            ";
-		
+
+		$protocolquery = "INSERT INTO `protocols`
+						(`user_id`, `protocolnum`, `protocoldate`, `etos`, 				`fakelos`, 	`thema`, 			`in_num`, `in_date`,
+							`in_topos_ekdosis`, `in_arxi_ekdosis`, `in_paraliptis`, `diekperaiosi`, 	`in_perilipsi`, `out_date`,
+							`diekp_date`, `sxetiko`, `out_to`, `out_perilipsi`, 												`keywords`, 	`paratiriseis`, `flags`) VALUES
+				    ( $entryby,		$protok, 			$protocoldate, $protocolyear,	'Φ.$tmima',	'ΕΞΕΡΧΟΜΕΝΟ', '',			 NULL	,
+							'',									'',									'',							'$diekperaivsi',	'',							$protocoldate,
+							$protocoldate,'',				'$strkid',	'ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ', '',						'$strprot0' , 		NULL	)
+						";
+
 		array_push ( $pinquery, $protocolquery );
 	}
 	
