@@ -34,7 +34,6 @@ if ($protokctrl == 2) {
 		$protresult = mysqli_query ( $link, $protquery );
 		$row = mysqli_fetch_assoc ( $protresult );
 		$protok = ( int ) $row ["protocolnum"] + 1;
-		echo $protok . "<hr>";
 
 		mysqli_close ( $link );
 	}
