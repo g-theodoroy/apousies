@@ -407,12 +407,12 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 		$strkid = $studentsdata [5] . " " . $studentsdata [4];
 
 		$protocolquery = "INSERT INTO `protocols`
-						(`user_id`, `protocolnum`, `protocoldate`, `etos`, 				`fakelos`, 	`thema`, 			`in_num`, `in_date`,
-							`in_topos_ekdosis`, `in_arxi_ekdosis`, `in_paraliptis`, `diekperaiosi`, 	`in_perilipsi`, `out_date`,
-							`diekp_date`, `sxetiko`, `out_to`, `out_perilipsi`, 												`keywords`, 	`paratiriseis`, `flags`) VALUES
-				    ( $entryby,		$protok, 			$protocoldate, $protocolyear,	'Φ.$tmima',	'ΕΞΕΡΧΟΜΕΝΟ', '',			 NULL	,
-							'',									'',									'',							'$diekperaivsi',	'',							$protocoldate,
-							$protocoldate,'',				'$strkid',	'ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ', '',						'$strprot0' , 		NULL	)
+						(`user_id`, `protocolnum`, `protocoldate`, `etos`,	 `fakelos`,   `thema`, 	    `in_num`, `in_date`,
+						`in_topos_ekdosis`, `in_arxi_ekdosis`, `in_paraliptis`, `diekperaiosi`, `in_perilipsi`, `out_date`,
+						`diekp_date`,  `sxetiko`, `out_to`,  `out_perilipsi`, 				`keywords`, `paratiriseis`, `flags`) VALUES
+						( $entryby, $protok, 	   $protocoldate,  $protocolyear, 'Φ.$tmima', 'ΕΞΕΡΧΟΜΕΝΟ', '',	       NULL,
+						'',		    '',		       '',		'$diekperaivsi', '',		$protocoldate,
+						$protocoldate, '',	  '$strkid', 'ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ',   '',	    '$strprot0' ,   NULL )
 						";
 
 		array_push ( $pinquery, $protocolquery );
