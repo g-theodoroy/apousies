@@ -5,7 +5,11 @@
 - Πλήρης αντιστοιχία με τα επίσημα βιβλία. 
 - Αυτόματα αθροίσματα, εκτυπώσεις, ...
 
-### [Αναλυτικές οδηγίες χρήσης] (https://github.com/g-theodoroy/apousies/blob/master/useful/odigies_apousies.pdf)
+### Αναλυτικές οδηγίες χρήσης
+https://github.com/g-theodoroy/apousies/blob/master/useful/odigies_apousies.pdf
+
+### Ρύθμιση αποστολής e-mail
+https://github.com/g-theodoroy/apousies/blob/master/useful/apousies-email-settings.pdf
 
 ### Εγκατάσταση
 - Κατεβάστε τον κώδικα της Διαχείρισης Απουσιών με όποιο τρόπο σας βολεύει και τοποθετήστε τον στον server
