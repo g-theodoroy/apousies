@@ -469,8 +469,7 @@ if ($target == 'parents') {
 	
 	$mail->SMTPKeepAlive = true;
 	$mail->ConfirmReadingTo = $teacher_email;
- 	$mail->AddCustomHeader( "X-Confirm-Reading-To: $teacher_email" );
-	$mail->AddCustomHeader( "Return-receipt-to: $teacher_email" );
+    	$mail->addCustomHeader("Disposition-Notification-To: $teacher_email");
 	$mail->Subject = "Διαχείριση Απουσιών. Δελτίο επικοινωνίας Σχολείου - Γονέων";
 	
 	for($i = 0; $i < count ( $pd ); $i ++) {
