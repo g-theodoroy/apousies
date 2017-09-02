@@ -27,7 +27,19 @@ if (!$mailserver || !$mailport || !$mailusername || !$mailpassword || !$from || 
 
 // 'ελεγχος της σύνδεσης
 if (!$errortext){
-	if (! mysql_connect($host,$username,$password))$errortext="Αδύνατη η σύνδεση στη mysql. Βεβαιωθείτε ότι έχετε τα σωστά στοιχεία!";
+    $link = mysqli_connect ( $host, $username, $password );
+
+    if (! $link) {
+        echo "Error: Unable to connect to MySQL." . PHP_EOL;
+        echo "Debugging errno: " . mysqli_connect_errno () . PHP_EOL;
+        echo "Debugging error: " . mysqli_connect_error () . PHP_EOL;
+        exit ();
+    }
+
+    mysqli_query ( $link, "SET character_set_connection=utf8" );
+    mysqli_query ( $link, "SET character_set_client=utf8" );
+    mysqli_query ( $link, "SET character set 'utf8'" );
+    mysqli_query ( $link, "SET NAMES 'utf8'" );
 }
 
 //echo "2 - $errortext<hr>";
@@ -35,19 +47,13 @@ if (!$errortext){
 
 //δημιουργία βάσης δεδομένων
 if (!$errortext){
-
-	mysql_query("SET character_set_connection=utf8");
-	mysql_query("SET character_set_client=utf8"); 
-	mysql_query("set character set 'utf8'");
-	mysql_query("SET NAMES 'utf8'");
-        
         if($replacedatabase==1){
             $query = "DROP DATABASE `$database` ;";
-            $result = mysql_query($query);
+            $result = mysqli_query ( $link, $query);
         }
 
 	$query = "CREATE DATABASE IF NOT EXISTS `$database` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-	$result = mysql_query($query);
+	$result = mysqli_query ( $link, $query);
 	if (! $result) $errortext="Αδύνατη η δημιουργία της βάσης δεδομένων. Βεβαιωθείτε ότι δεν υπάρχει ήδη βάση δεδομένων με το όνομα αυτό!";
 }
 
@@ -55,7 +61,7 @@ if (!$errortext){
 
 //επιλογή της βάσης
 if (!$errortext){
-	if (!mysql_select_db($database))$errortext="Αδύνατη η επιλογή της βάσης δεδομένων";
+	if (!mysqli_select_db( $link,$database))$errortext="Αδύνατη η επιλογή της βάσης δεδομένων";
 }
 
 //echo "4 - $errortext<hr>";
@@ -65,7 +71,7 @@ if (!$errortext){
 if (!$errortext){
 	$queryarray= file("apousies_db.sql");
 	for ($i=0;$i<count($queryarray);$i++){
-		$result = mysql_query($queryarray[$i]);
+		$result = mysqli_query ( $link, $queryarray[$i]);
 		if(! $result) $errortext="Σφάλμα στην δημιουργία των πινάκων στη βάση δεδομένων $database: " . mysql_error() .  "!";
 	}
 }
@@ -165,7 +171,7 @@ fclose($fh);
 //echo "6 - $errortext<hr>";
 
 
-mysql_close();
+mysqli_close();
 
 ?>
 
@@ -279,4 +285,3 @@ if ($errortext) {
 </div>
 </body>
 </html>
-
