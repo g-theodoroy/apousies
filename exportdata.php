@@ -260,14 +260,16 @@ if (isset ( $_POST ["send"] ) || isset ( $_POST ["sendmail"] )) {
 		
 		$sqlparameters = '';
 		
-		foreach ( $parameters as $tmi => $row ) {
-			foreach ( $row as $key => $value ) {
-				$sqlparameters .= "('$tmi',";
-				$sqlparameters .= "'$key',";
-				$sqlparameters .= "'$value',";
-				$sqlparameters .= "'_usr_')";
-				$sqlparameters .= ",\r\n";
-			}
+		if ($parameters) {
+            foreach ( $parameters as $tmi => $row ) {
+                foreach ( $row as $key => $value ) {
+                    $sqlparameters .= "('$tmi',";
+                    $sqlparameters .= "'$key',";
+                    $sqlparameters .= "'$value',";
+                    $sqlparameters .= "'_usr_')";
+                    $sqlparameters .= ",\r\n";
+                }
+            }
 		}
 		
 		if ($sqlparameters)
