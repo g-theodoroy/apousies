@@ -10,6 +10,7 @@ checkUser ();
 
 isset ( $_SESSION ['userName'] ) ? $user = $_SESSION ['userName'] : $user = '';
 isset ( $_SESSION ['parent'] ) ? $parent = $_SESSION ['parent'] : $parent = '';
+isset ( $_SESSION ['parentUser'] ) ? $parentUser = $_SESSION ['parentUser'] : $parentUser = false;
 
 if (isset ( $_POST ['submitBtn'] )) {
 	// Get user input
@@ -104,8 +105,11 @@ if (isset ( $_POST ['submitBtn'] )) {
 // ενημέρωση των τμημάτων στη SESSION
 isset ( $_SESSION ['tmima'] ) ? $tmima = $_SESSION ['tmima'] : $tmima = '';
 
-set_select_tmima ( $parent );
-
+if ($parentUser){
+    set_select_tmima ( $parent );
+}else{
+    set_select_tmima ( $user );
+}
 
 $smarty = new Smarty ();
 
@@ -158,7 +162,11 @@ $smarty->assign ( 'h1_title', 'Τμήματα' );
 // συνδέομαι με τη βάση
 include ("includes/dbinfo.inc.php");
 
-$query = "SELECT `tmima`,`type` FROM `tmimata` WHERE `username` = '$parent'  ORDER BY `tmima`;";
+if($parentUser){
+    $query = "SELECT `tmima`,`type` FROM `tmimata` WHERE `username` = '$parent'  ORDER BY `tmima`;";
+}else{
+    $query = "SELECT `tmima`,`type` FROM `tmimata` WHERE `username` = '$user'  ORDER BY `tmima`;";
+}
 
 $result = mysqli_query ( $link, $query );
 
