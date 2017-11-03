@@ -36,7 +36,7 @@ if (! isset ( $_POST ["submitBtn"] )) {
 	$smarty->assign ( 'body_attributes', "" );
 	$smarty->assign ( 'extra_javascript', "" );
 	
-	$smarty->display ( 'apousiesgxls4myschool.tpl' );
+	$smarty->display ( 'apousiesxls4myschool.tpl' );
 	exit ();
 }
 
@@ -64,14 +64,18 @@ if ($tmima) {
 	where apousies_pre.user='$parent'
 	order by mydate, epitheto, onoma) AS t1
 	on t1.am = studentstmimata.student_am
-	WHERE tmima = '$tmima' $wherestr ";
+	WHERE tmima = '$tmima' $wherestr 
+    UNION
+    ";
 	
 	$query = "select  tmima, mydate, DATE_FORMAT(`mydate`,'%e/%c/%Y') as `formdate`, am, apous - 9 * FLOOR( (apous-1 ) / 9 ) as apous, dik, name from studentstmimata JOIN
 	(SELECT concat(epitheto,' ', onoma) as name, am, mydate, apous, dik from students join apousies on  am  = apousies.student_am
 	where apousies.user='$parent'
 	order by mydate, epitheto, onoma) AS t1
 	on t1.am = studentstmimata.student_am
-	WHERE tmima = '$tmima' $wherestr";
+	WHERE tmima = '$tmima' $wherestr
+    UNION
+    ";
 } else {
 	// συνδέομαι με τη βάση
 	include ("includes/dbinfo.inc.php");
@@ -86,28 +90,24 @@ if ($tmima) {
 		where apousies_pre.user='$parent'
 		order by mydate, epitheto, onoma) AS t1
 		on t1.am = studentstmimata.student_am
-		WHERE tmima = '$tmigen' $wherestr";
+		WHERE tmima = '$tmigen' $wherestr
+        UNION
+        ";
 		
 		$query .= "select tmima, mydate, DATE_FORMAT(`mydate`,'%e/%c/%Y') as `formdate`, am,  apous - 9 * FLOOR( (apous-1 ) / 9 ) as apous, dik, name from studentstmimata JOIN
 		(SELECT concat(epitheto, ' ', onoma) as name, am, mydate, apous, dik from students join apousies on  am  = apousies.student_am
 		where apousies.user='$parent'
 		order by mydate, epitheto, onoma) AS t1
 		on t1.am = studentstmimata.student_am
-		WHERE tmima = '$tmigen' $wherestr";
-		
-		if (next ( $tmiarray [$kod] )) {
-			$prequery .= "\nUNION\n";
-			$query .= "\nUNION\n";
-		}
-	}
+		WHERE tmima = '$tmigen' $wherestr
+        UNION
+        ";
+    }
 	
 	mysqli_close ( $link );
 }
 
-$finalquery = $prequery . "\nUNION\n" . $query . " order by tmima, mydate, name ;";
-
-// echo $finalquery;
-// echo "<hr>";
+$finalquery = $prequery . substr(trim($query),0 ,strlen(trim($query))-6) . " order by tmima, mydate, name ;";
 
 // συνδέομαι με τη βάση
 include ("includes/dbinfo.inc.php");
