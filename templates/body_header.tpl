@@ -23,9 +23,12 @@
                     		{if isset($smarty.session.tmima) && $tmima == $smarty.session.tmima}
                         		<span style='color:white;background-color:#222;' >&nbsp;{$tmima}&nbsp;</span>
                     		{else}
-                        		<a href='set_tmima.php?t={$tmima}'>&nbsp;{$tmima}&nbsp;</a>
+                        		<a href='set_tmima.php?t={$tmima}' title="Επιλογή {$tmima}">&nbsp;{$tmima}&nbsp;</a>
                     		{/if}
 		                {/foreach}
+		                {if isset($smarty.session.tmima) }
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href='set_tmima.php?t=' title="Ακύρωση επιλογής τμήματος {$smarty.session.tmima}">&nbsp;x&nbsp;</a>
+                        {/if}
 		           {/if}
             </div> 
         {/if}

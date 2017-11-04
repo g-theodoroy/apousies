@@ -22,9 +22,10 @@
 
             <tr><TD colspan="{$colspan}"><hr></TD></tr>
             <tr><td colspan="{$colspan}"><h3>ΕΠΙΛΟΓΗ ΤΜΗΜΑΤΟΣ</h3></td></tr>
-            <tr><TD colspan="{$colspan}"><INPUT type="radio" name="seltmima" value="allstu" >ΟΛΟΙ ΟΙ ΜΑΘΗΤΕΣ</TD></tr>
-            <tr><TD colspan="{$colspan}"><hr></TD></tr>
-
+            {if isset($smarty.session.tmima)}
+                <tr><TD colspan="{$colspan}"><INPUT type="radio" name="seltmima" value="allstu" >Ακύρωση επιλογής τμήματος {$smarty.session.tmima}</TD></tr>
+                <tr><TD colspan="{$colspan}"><hr></TD></tr>
+            {/if}
             {/if}
 
              <tr>

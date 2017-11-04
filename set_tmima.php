@@ -6,7 +6,10 @@ checkUser();
 isset($_GET['t']) ? $tmima = $_GET['t'] : $tmima = $_SESSION['tmima'];
 $referer = $_SERVER['HTTP_REFERER'];
 
-$_SESSION['tmima'] = $tmima;
-
+if ($tmima == ''){
+    unset($_SESSION['tmima']);
+}else{
+    $_SESSION['tmima'] = $tmima;
+}
 header("Location: $referer");
 ?>
