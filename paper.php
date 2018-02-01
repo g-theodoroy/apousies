@@ -13,6 +13,7 @@ isset ( $_POST ['protokctrl'] ) ? $protokctrl = trim ( $_POST ['protokctrl'] ) :
 isset ( $_POST ['history'] ) ? $history = trim ( $_POST ['history'] ) : $history = '';
 isset ( $_POST ['lastdate'] ) ? $lastdate = makedatestamp ( trim ( $_POST ['lastdate'] ) ) : $lastdate = date ( 'Ymd' );
 isset ( $_POST ['paperdate'] ) ? $paperdate = makedatestamp ( trim ( $_POST ['paperdate'] ) ) : $paperdate = date ( 'Ymd' );
+isset ( $_POST ['paperdetails'] ) ? $paperdetails = trim ( $_POST ['paperdetails'] ) : $paperdetails = 0;
 isset ( $_POST ['submitBtn'] ) ? $target = $_POST ['submitBtn'] : $target = 'print';
 
 if ($protokctrl == 2) {

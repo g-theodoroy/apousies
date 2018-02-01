@@ -85,19 +85,21 @@
     </head>
     <body>
 
-        {foreach from=$mypd item=foo name='my'} 
+        {foreach from=$mypd item=foo name='my'}
 
             <div style="margin : 0 auto 0 auto; width : 200mm; height:277mm; border:none">
 
                 <table class='out' border=0 width="100%">
                     <tbody>
                         <tr>
-                            <td colspan=2 height='10mm' >ΣΧΟΛΙΚΗ ΜΟΝΑΔΑ: {if isset($foo.txtdata.sch_name)}{$foo.txtdata.sch_name}{/if}</td>
+                            <td colspan=2 >ΣΧΟΛΙΚΗ ΜΟΝΑΔΑ: {if isset($foo.txtdata.sch_name)}{$foo.txtdata.sch_name}{/if}</td>
                             <td  align="right"   >ΣΧΟΛΙΚΟ ΕΤΟΣ: {if isset($foo.txtdata.sch_year)}{$foo.txtdata.sch_year}{/if}</td>
                         </tr>
+                          <tr><td colspan=3 >&nbsp;</td></tr>
                         <tr>
-                            <td colspan=3 align="center" height='10mm' ><h3>ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ  ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ</h3></td>
+                            <td colspan=3 align="center" ><h3>ΔΕΛΤΙΟ ΕΠΙΚΟΙΝΩΝΙΑΣ  ΣΧΟΛΕΙΟΥ - ΓΟΝΕΩΝ</h3></td>
                         </tr>
+                          <tr><td colspan=3 >&nbsp;</td></tr>
                         <tr>
                             <td colspan=2 style="left-padding :10mm;"><u>ΜΑΘΗΤΗΣ/ΤΡΙΑ</u></td>
                             <td  ><u>ΠΑΡΑΛΗΠΤΗΣ</u></td>
@@ -109,7 +111,7 @@
                                 ΤΑΞΗ:<br>
                                 ΤΜΗΜΑ:
                             </td>
-                            <td width='40%' height='25mm' >
+                            <td width='40%' >
                                 {$foo.studentsdata[0]}<br>
                                 {$foo.studentsdata[1]}<br>
                                 {if isset($foo.txtdata.sch_class)}{$foo.txtdata.sch_class}{/if}<br>
@@ -124,12 +126,16 @@
 
                             </td>
                         </tr>
-                         <tr>
-                            <td colspan=3 height='15mm'>
-                                1. Σας πληροφορούμε ότι {$foo.keimeno0} {$foo.studentsdata[0]} {$foo.studentsdata[1]} της {if isset($foo.txtdata.sch_class)}{$foo.txtdata.sch_class}{/if} τάξης του {if isset($foo.txtdata.sch_tmima)}{$foo.txtdata.sch_tmima}{/if} τμήματος του σχολείου μας από την έναρξη της σχολικής χρονιάς μέχρι τις {$foo.mydate},  σημείωσε &nbsp;&nbsp;&nbsp;<b>{$foo.totalap}</b>&nbsp;&nbsp;&nbsp; απουσίες. 
+                          <tr><td colspan=3 >&nbsp;</td></tr>
+                        <tr>
+                            <td colspan=3 >
+                                1. Σας πληροφορούμε ότι {$foo.keimeno0} {$foo.studentsdata[0]} {$foo.studentsdata[1]} της {if isset($foo.txtdata.sch_class)}{$foo.txtdata.sch_class}{/if} τάξης του {if isset($foo.txtdata.sch_tmima)}{$foo.txtdata.sch_tmima}{/if} τμήματος του σχολείου μας από την έναρξη της σχολικής χρονιάς μέχρι τις {$foo.mydate},  σημείωσε &nbsp;&nbsp;&nbsp;<b>{$foo.totalap}</b>&nbsp;&nbsp;&nbsp; απουσίες.
                          </td>
                          </tr>
-                         <tr><td colspan=3 >Αναλυτικά:</td></tr>
+{if $paperdetails}
+                        <tr><td colspan=3 >&nbsp;</td></tr>
+                        <tr><td colspan=3 >Αναλυτικά:</td></tr>
+                        <tr><td colspan=3 >&nbsp;</td></tr>
                         </tr>
                     </tbody>
                 </table>
@@ -205,31 +211,61 @@
                         <tr>
                                 <th  class="inner" colspan=2 >ΣΥΝΟΛΟ ΑΔΙΚ/ΤΩΝ</th><th  class="inner" colspan=2 >{$foo.totaladik}</th>
                         </tr>
+{/if}
                     </tbody>
                 </table>
                         <br>
                 <table border=0 width="100%" class='out'>
                     <tbody>
+                          <tr><td colspan=2 >&nbsp;</td></tr>
                         <tr>
-                            <td colspan=2 height='10mm'>
+                            <td colspan=2 >
                                 2. Στο χρονικό διάστημα απο 1/{$foo.lastmonthindex9} έως {$foo.mydate} <u>{$foo.aformi}</u> για πειθαρχικό έλεγχο.</td>
                         </tr>
+                        <tr><td colspan=2 >&nbsp;</td></tr>
                         <tr>
-                            <td colspan=2 height='15mm' >3. Παρακαλούμε να προσέλθετε στο σχολείο κατά το διάστημα από 1 έως 10 του μήνα {$foo.lastmonth} για ενημέρωσή σας σχετικά με τη φοίτηση {$foo.keimeno1} προσκομίζοντας την παρούσα επιστολή.</td>
+                            <td colspan=2 >3. Παρακαλούμε να προσέλθετε στο σχολείο κατά το διάστημα από 1 έως 10 του μήνα {$foo.lastmonth} για ενημέρωσή σας σχετικά με τη φοίτηση {$foo.keimeno1} προσκομίζοντας την παρούσα επιστολή.</td>
                         </tr>
+                        <tr><td colspan=2 >&nbsp;</td></tr>
                         <tr><td colspan=4 align="left" >ΑΡ.ΠΡΩΤ: {$foo.protok}</td></tr>
                         <tr>
-                            <td width="60%" height='25mm' >ΗΜ/ΝΙΑ: {$foo.nowdate}</td>
+                            <td width="60%" >ΗΜ/ΝΙΑ: {$foo.nowdate}</td>
                             <td width="40%">{if isset($foo.txtdata.teach_arthro)}{$foo.txtdata.teach_arthro}{/if} ΚΑΘΗΓΗ{if isset($foo.txtdata.teach_last)}{$foo.txtdata.teach_last}{/if}</td>
                         </tr>
+                          <tr><td colspan=3 >&nbsp;</td></tr>
+                          <tr><td colspan=3 >&nbsp;</td></tr>
+                          <tr><td colspan=3 >&nbsp;</td></tr>
                         <tr>
                             <td width="60%">&nbsp;</td>
                             <td width="40%">{if isset($foo.txtdata.teach_name)}{$foo.txtdata.teach_name}{/if}</td>
                         </tr>
-                        <tr><td colspan=2 height='20mm' >&nbsp;</td></tr>
+
+                        <tr><td colspan=2 >
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          {if !$paperdetails}
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          &nbsp;<br>
+                          {/if}
+                        </td></tr>
                     </tbody>
                 </table>
-
                 <table width="100%" cellpadding=2 cellspacing=0 border="1" style="outline : solid;">
                     <tr><td >ΠΑΡΕΛΗΦΘΗ ΑΠΟ ΤΟΝ ΚΗΔΕΜΟΝΑ<br><br>Ονοματεπώνυμο: .............................................................................................&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ημερομηνία : ...../...../........</td></tr>
                 </table>

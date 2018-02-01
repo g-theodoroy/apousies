@@ -38,13 +38,17 @@
                 <td><input name='paperdate' id='paperdate' value="{$smarty.now|date_format:"%e/%-m/%Y"}" size="10" style="text-align : center; background-color : #fff;"/></td>
             </tr>
             <tr>
+                <td colspan='2'><h4 class="nomargin" align="center">Παρουσίαση απουσιών</h4></td>
+                <td><select name="paperdetails" id="paperdetails"><option value="0">ΠΕΡΙΛΗΠΤΙΚΑ</option><option value="1">ΑΝΑΛΥΤΙΚΑ</option></select></td>
+            </tr>
+            <tr>
                 <td colspan='2'><h4 class="nomargin" align="center">Να αποθηκευτούν τα ειδοποιητήρια στο ιστορικό</h4></td>
                 <td><select name='history' id='history'><option value="0">ΟΧΙ</option><option value="1">ΝΑΙ</option></select></td>
             </tr>
         </table>
         {if isset($smarty.get.m)}
             {if $smarty.get.m == 1}
-                <h4 style='color : green;'>Επιτυχημένη αποστολή email ειδοποιητηρίων{if isset($mail_good)} στους γονείς των μαθητών:<br>{foreach from=$mail_good item=value}{$value}<br>{/foreach}{/if}</h4>  
+                <h4 style='color : green;'>Επιτυχημένη αποστολή email ειδοποιητηρίων{if isset($mail_good)} στους γονείς των μαθητών:<br>{foreach from=$mail_good item=value}{$value}<br>{/foreach}{/if}</h4>
                 {if isset($mail_bad)}<h4 style='color : red;'>Αποτυχημένη αποστολή email ειδοποιητηρίων στους γονείς των μαθητών:<br>{foreach from=$mail_bad item=value}{$value}<br>{/foreach}</h4>{/if}
            {else}
                 <h4 style='color : red;'>Αποτυχημένη αποστολή email ειδοποιητηρίων</h4>
