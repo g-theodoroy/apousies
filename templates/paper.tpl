@@ -35,7 +35,7 @@
         {assign var=totalheight value=297-2*15}
         {foreach from=$mypd item=foo}
 
-            <div style="margin : 0 auto 0 auto; width :{$totalwidth}mm; height:{$totalheight}mm; ">
+            <div style="margin : 0 auto 0 auto; width :{$totalwidth}mm; ">
 
                 <div style="width :50%; height:15mm;float: left ; ">ΣΧΟΛΙΚΗ ΜΟΝΑΔΑ: {if isset($foo.txtdata.sch_name)}{$foo.txtdata.sch_name}{/if}</div>
                 <div style="width :50%; height:15mm;float: right ; text-align: right;">ΣΧΟΛΙΚΟ ΕΤΟΣ: {if isset($foo.txtdata.sch_year)}{$foo.txtdata.sch_year}{/if}</div>
