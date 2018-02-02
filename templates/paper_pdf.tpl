@@ -246,9 +246,6 @@
                           &nbsp;<br>
                           &nbsp;<br>
                           &nbsp;<br>
-                          &nbsp;<br>
-                          &nbsp;<br>
-                          &nbsp;<br>
                           {if !$paperdetails}
                           &nbsp;<br>
                           &nbsp;<br>
