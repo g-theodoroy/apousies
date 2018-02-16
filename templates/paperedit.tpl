@@ -4,7 +4,7 @@
 <div class="column span-17 prepend-3 last " align="center" >
 
     <form name="frm" method="POST" action='' onsubmit=" return validate_form(this);">
-        <IMG class="tour dropshadow" src="{$smarty.session.images_prefix}myletter.png" width="300px" >
+        <IMG class="tour dropshadow" src="{$smarty.session.images_prefix}myletter.png" height="200px" >
         <table>
             <tr>
                 <td colspan='3'>
@@ -63,7 +63,11 @@
             {/if}
         </h4>
         <h4>
-            <button type="submit" name="submitBtn" value="parents" onclick="frm.action='paper.php';frm.target='';return check_mail_to_parents();" title="Αποστολή ειδοποιητηρίων με e-mail στους κηδεμόνες που έχουν καταχωρημένο e-mail" >E-mail ΣΕ ΚΗΔΕΜΟΝΕΣ</button>&nbsp;
+            <button type="submit" name="submitBtn" value="parents" onclick="frm.action='paper.php';frm.target='';return check_mail_to_parents();" title="Αποστολή e-mail στους κηδεμόνες που έχουν καταχωρημένο e-mail" >E-mail ΣΕ ΚΗΔΕΜΟΝΕΣ</button>&nbsp;
+            Κοινοποίηση σε: <input type="checkbox" name="cc_sch" checked>σχολείο</input>&nbsp;<input type="checkbox" name="cc_teacher" checked>καθηγητή</input>
+
+        </h4>
+        <h4>
             <button type="button" name="exit" value="exit" onclick="window.location='index.php'">ΕΠΙΣΤΡΟΦΗ</button>
         </h4>
     </form>

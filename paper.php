@@ -15,6 +15,8 @@ isset ( $_POST ['lastdate'] ) ? $lastdate = makedatestamp ( trim ( $_POST ['last
 isset ( $_POST ['paperdate'] ) ? $paperdate = makedatestamp ( trim ( $_POST ['paperdate'] ) ) : $paperdate = date ( 'Ymd' );
 isset ( $_POST ['paperdetails'] ) ? $paperdetails = trim ( $_POST ['paperdetails'] ) : $paperdetails = 0;
 isset ( $_POST ['submitBtn'] ) ? $target = $_POST ['submitBtn'] : $target = 'print';
+isset ( $_POST ['cc_sch'] ) ? $cc_sch = 1 : $cc_sch = 0;
+isset ( $_POST ['cc_teacher'] ) ? $cc_teacher = 1 : $cc_teacher = 0;
 
 if ($protokctrl == 2) {
 	if (file_exists ( "includes/protocolapousies.inc.php" )) {
@@ -111,6 +113,10 @@ include ("includes/dbinfo.inc.php");
 $query = "SELECT `email` FROM `users` WHERE `username` = '$parent' ;";
 $result = mysqli_query ( $link, $query );
 $row = mysqli_fetch_assoc ( $result );
+$sch_email = $row ["email"];
+$query = "SELECT `email` FROM `users` WHERE `username` = '$user' ;";
+$result = mysqli_query ( $link, $query );
+$row = mysqli_fetch_assoc ( $result );
 $teacher_email = $row ["email"];
 mysqli_close ( $link );
 
@@ -170,23 +176,23 @@ $inquery = "SELECT `students`.`user` ,
         `students`.`til2`,
         `students`.`email`,
         `students`.`filo`,
-        `t2`.`sumap`, 
-        `t2`.`sumdik`, 
-        `t2`.`sumadik`, 
-        `t2`.`sumdaysp`, 
+        `t2`.`sumap`,
+        `t2`.`sumdik`,
+        `t2`.`sumadik`,
+        `t2`.`sumdaysp`,
          $t2dikstr ,
-        `t2`.`sumfh`, 
-        `t2`.`summh`, 
-        `t2`.`sumlh`, 
-        `t2`.`sumoa`, 
-        `t2`.`sumda`, 
+        `t2`.`sumfh`,
+        `t2`.`summh`,
+        `t2`.`sumlh`,
+        `t2`.`sumoa`,
+        `t2`.`sumda`,
         `t2`.`sumoada`,
         `t2`.`aformi`
-       
+
 FROM `students`
-JOIN 
+JOIN
 (SELECT `user`,
-        `student_am`, 
+        `student_am`,
         SUM(`t1`.`sumap`) as `sumap`,
         SUM(`t1`.`sumdik`) as `sumdik`,
         SUM(`t1`.`sumadik`) as `sumadik`,
@@ -198,13 +204,13 @@ JOIN
         SUM(`sumoa`) as `sumoa`,
         SUM(`sumda`) as `sumda`,
         SUM(`sumoada`)as `sumoada` ,
-        SUM(`aformi`)as `aformi` 
-                
-FROM  
+        SUM(`aformi`)as `aformi`
+
+FROM
 (SELECT `user`,
         `apousies`.`student_am`,
         $sumstr as `sumap`,
-        SUM(`dik`) as `sumdik`, 
+        SUM(`dik`) as `sumdik`,
         $sumstr - SUM(`dik`) as `sumadik`,
         SUM(IF(`from`='P',1,0)) as `sumdaysp`,
         $sumdikstr ,
@@ -216,9 +222,9 @@ FROM
         SUM(`oa`)  + SUM(`da`) as `sumoada` ,
         if( (SUM(IF(`mydate`>=$aformidate,`oa`,0)) + SUM(IF(`mydate`>=$aformidate,`da`,0)) )>0,1,0) as `aformi`
 FROM `apousies`
-where `apousies`.`user` = '$parent' AND `mydate` <= $lastdate 
+where `apousies`.`user` = '$parent' AND `mydate` <= $lastdate
 group by  `apousies`.`student_am`
-        
+
 UNION
 SELECT `user`,
         `apousies_pre`.`student_am`,
@@ -230,17 +236,17 @@ SELECT `user`,
         `fh`,
         `mh`,
         `lh`,
-        `oa`,       
+        `oa`,
         `da`,
         `oa`+`da` as `oada`,
         '0' as `aformi`
-        
+
 FROM `apousies_pre`
 where `apousies_pre`.`user` = '$parent' AND `mydate` <= $lastdate) as t1
 group by `student_am`
 having `sumap`>$apover) as `t2`
-        
-on `students`.`user` = `t2`.`user` AND  `students`.`am` = `t2`.`student_am` 
+
+on `students`.`user` = `t2`.`user` AND  `students`.`am` = `t2`.`student_am`
 JOIN `studentstmimata` on `students`.`user` = `studentstmimata`.`user`  and  `am` = `studentstmimata`.`student_am`
 WHERE  `studentstmimata`.`tmima` = '$tmima' #1#
 ORDER BY `epitheto`,`onoma` ASC ";
@@ -248,17 +254,17 @@ ORDER BY `epitheto`,`onoma` ASC ";
 $query = str_replace ( '#1#', "AND `students`.`am` = '$student'", $inquery );
 
 if ($apover != '') {
-	
+
 	if ($student == "all" || $student == "new") {
-		
+
 		$query = str_replace ( '#1#', "", $inquery );
 		// echo $query . "<hr>\n";
 	}
 	if ($student == "new") {
 		
 		$t3dikstr = str_replace ( "t2", "t3", $t2dikstr );
-		
-		$query = "SELECT 
+
+		$query = "SELECT
         `t3`.`am`,
         `t3`.`epitheto`,
         `t3`.`onoma`,
@@ -272,26 +278,26 @@ if ($apover != '') {
         `t3`.`til2`,
         `t3`.`email`,
         `t3`.`filo`,
-        `t3`.`sumap`, 
-        `t3`.`sumdik`, 
-        `t3`.`sumadik`, 
-        `t3`.`sumdaysp`, 
+        `t3`.`sumap`,
+        `t3`.`sumdik`,
+        `t3`.`sumadik`,
+        `t3`.`sumdaysp`,
          $t3dikstr ,
-        `t3`.`sumfh`, 
-        `t3`.`summh`, 
-        `t3`.`sumlh`, 
-        `t3`.`sumoa`, 
-        `t3`.`sumda`, 
+        `t3`.`sumfh`,
+        `t3`.`summh`,
+        `t3`.`sumlh`,
+        `t3`.`sumoa`,
+        `t3`.`sumda`,
         `t3`.`sumoada`,
         `t3`.`aformi`
- 
+
 
 FROM `paperhistory` RIGHT JOIN
 
 (
 $query )as `t3`
 
-ON `paperhistory`.`user` = `t3`.`user` AND `paperhistory`.`am` = `t3`.`am` 
+ON `paperhistory`.`user` = `t3`.`user` AND `paperhistory`.`am` = `t3`.`am`
 WHERE ISNULL(`paperhistory`.`am`)
 ORDER BY `epitheto`,`onoma` ASC;";
 	}
@@ -311,7 +317,7 @@ $num = mysqli_num_rows ( $result );
 
 $i = 0;
 while ( $row = mysqli_fetch_assoc ( $result ) ) {
-	
+
 	$studentsdata [0] = $row ["epitheto"];
 	$studentsdata [1] = $row ["onoma"];
 	$studentsdata [2] = $row ["patronimo"];
@@ -325,7 +331,7 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	$studentsdata [10] = $row ["til2"];
 	$studentsdata [11] = $row ["filo"];
 	$studentsdata [12] = $row ["email"];
-	
+
 	$txtdata = get_all_parameters ( $parent, $tmima );
 	$studentsdata [11] == "Α" ? $keimeno0 = "ο μαθητής " : $keimeno0 = "η μαθήτρια ";
 	$studentsdata [11] == "Α" ? $keimeno1 = "του ανωτέρω μαθητή " : $keimeno1 = "της ανωτέρω μαθήτριας ";
@@ -334,24 +340,24 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	if ($protokctrl == 2) {
 		$nowdate = date ( "d/m/Y" );
 	}
-	
+
 	$lastmonthindex9 = $lastmonthindex + 9;
 	if ($lastmonthindex9 > 12)
 		$lastmonthindex9 -= 12;
 	$lastmonthindex1 = $lastmonthindex + 1;
-	
+
 	$aformichk = $row ["aformi"];
 	$aformichk > 0 ? $aformi = "έδωσε αφορμή" : $aformi = "δεν έδωσε αφορμή";
-	
+
 	$pd [$i] ['studentsdata'] = $studentsdata;
 	$pd [$i] ['txtdata'] = $txtdata [$tmima];
 	$pd [$i] ['keimeno0'] = $keimeno0;
 	$pd [$i] ['keimeno1'] = $keimeno1;
 	$pd [$i] ['mydate'] = $mydate;
-	
+
 	$pd [$i] ['totalap'] = $row ["sumap"] > 0 ? $row ["sumap"] : '-';
 	$pd [$i] ['totalfulldayadik'] = $row ["sumadik"] - $row ["sumfh"] - $row ["summh"] - $row ["sumlh"] > 0 ? $row ["sumadik"] - $row ["sumfh"] - $row ["summh"] - $row ["sumlh"] : '-';
-	
+
 	foreach ( $dikaiologisi_define as $key => $value ) {
 		$kod1 = 'totald' . $value ['kod'];
 		$kod2 = 'sumd' . $value ['kod'];
@@ -359,22 +365,22 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	}
 	$pd [$i] ['totaldik'] = $row ["sumdik"] > 0 ? $row ["sumdik"] : '-';
 	$pd [$i] ['totaladik'] = $row ["sumadik"] > 0 ? $row ["sumadik"] : '-';
-	
+
 	$pd [$i] ['totalfh'] = $row ["sumfh"] > 0 ? $row ["sumfh"] : '-';
 	$pd [$i] ['totalmh'] = $row ["summh"] > 0 ? $row ["summh"] : '-';
 	$pd [$i] ['totallh'] = $row ["sumlh"] > 0 ? $row ["sumlh"] : '-';
 	$pd [$i] ['totalmemon'] = $row ["sumfh"] + $row ["summh"] + $row ["sumlh"] > 0 ? $row ["sumfh"] + $row ["summh"] + $row ["sumlh"] : '-';
-	
+
 	$pd [$i] ['totaloa'] = $row ["sumoa"] > 0 ? $row ["sumoa"] : '-';
 	$pd [$i] ['totalda'] = $row ["sumda"] > 0 ? $row ["sumda"] : '-';
 	$pd [$i] ['totaloada'] = $row ["sumoada"] > 0 ? $row ["sumoada"] : '-';
-	
+
 	$pd [$i] ['lastmonthindex9'] = $lastmonthindex9;
 	$pd [$i] ['lastmonthindex'] = $lastmonthindex;
 	$pd [$i] ['lastmonthindex1'] = $lastmonthindex1;
 	$pd [$i] ['lastmonth'] = $lastmonth [$lastmonthindex1];
 	$pd [$i] ['lastmonthaitiatiki'] = $lastmonthaitiatiki [$lastmonthindex];
-	
+
 	$pd [$i] ['aformi'] = $aformi;
 	$pd [$i] ['protok'] = $protok;
 	$pd [$i] ['nowdate'] = $nowdate;
@@ -450,9 +456,9 @@ $paper->assign ( 'title', 'ΕΙΔΟΠΟΙΗΤΗΡΙΟ' );
 $paper->assign ( 'dik_count', $dik_count );
 $paper->assign ( 'dik_kod', $dik_kod );
 $paper->assign ( 'paper_dik_define', $paper_dik_define );
+$paper->assign ( 'paperdetails', $paperdetails );
 
 if ($target == 'parents') {
-	
 	$mail_good = array ();
 	$mail_bad = array ();
 	
@@ -473,6 +479,9 @@ if ($target == 'parents') {
     	$mail->addCustomHeader("Disposition-Notification-To: $teacher_email");
 	$mail->Subject = "Διαχείριση Απουσιών. Δελτίο επικοινωνίας Σχολείου - Γονέων";
 	
+    if ($cc_sch) $mail->AddCC($sch_email);
+    if ($cc_teacher) $mail->AddCC($teacher_email);
+
 	for($i = 0; $i < count ( $pd ); $i ++) {
 		
 		$email = $pd [$i] ['studentsdata'] [12];
@@ -480,32 +489,47 @@ if ($target == 'parents') {
 		if ($email) { // an exei email
 			$pd_one = array ();
 			$pd_one [0] = $pd [$i];
-			$paper->assign ( 'mypd', $pd_one );
-			$html = $paper->fetch ( 'paper_pdf.tpl' );
-			
-			$mpdf = new mPDF ( '', // mode - default ''
-			$page_format, // format - A4, for example, default ''
-			$font_size, // font size - default 0
-			'', // default font family
-			$page_left, // margin_left
-			$page_right, // margin right
-			$page_top, // margin top
-			$page_bottom, // margin bottom
-			0, // margin header
-			0, // margin footer
-			$orientation ); // L - landscape, P - portrait
-			
-			$mpdf->WriteHTML ( $html );
-			
+
+            $mail->From = $sch_email;
+            $mail->Fromname = $pd_one[0]["txtdata"]["sch_name"];
+
 			$studentsname = $pd [$i] ['studentsdata'] [0] . "-" . $pd [$i] ['studentsdata'] [1];
-			$filename = " Απουσίες-$studentsname-" . str_replace ( '/', '-', $nowdate ) . ".pdf";
-			$fileContent = $mpdf->Output ( $filename, 'S' );
-			$body = "Διαχείριση Απουσιών. \r\n \r\n Σας αποστέλλουμε στο επισυναπτόμενο pdf αρχείο το 'Δελτίο Επικοινωνίας Σχολείου - Γονέων' όπου φαίνονται οι απουσίες που έχει ο/η μαθητής/τρια $studentsname μέχρι σήμερα.\r\n\r\nΠαρακαλούμε για πληρέστερη ενημέρωσή σας να περάσετε από το σχολείο μας.\r\n\r\nΟ υπέυθυνος καθηγητής.";
-			
-			$mail->Body = $body;
+			$paper->assign ( 'mypd', $pd_one );
+			$paper->assign ( 'email', $email );
+			$paper->assign ( 'teacher_email', $teacher_email );
+			$html = file_get_contents( 'templates/paper_email_plain.tpl' );
+
+			$html = str_replace( "###datetime###" ,date("j/n/Y H:i:s")  , $html);
+			$html = str_replace( "###from###" ,$sch_email  , $html);
+			$html = str_replace( "###teacher_email###" ,$teacher_email  , $html);
+			$html = str_replace( "###sch_name###" ,$pd_one[0]["txtdata"]["sch_name"]  , $html);
+			$html = str_replace( "###teach_name###" ,$pd_one[0]["txtdata"]["teach_name"]  , $html);
+			$html = str_replace( "###sch_tmima###" ,$pd_one[0]["txtdata"]["sch_tmima"]  , $html);
+			$html = str_replace( "###sch_tel###" ,$pd_one[0]["txtdata"]["sch_tel"]  , $html);
+			$html = str_replace( "###email###" ,$email  , $html);
+			$html = str_replace( "###sch_year###" ,$pd_one[0]["txtdata"]["sch_year"]  , $html);
+			$html = str_replace( "###eponimo###" ,$pd_one[0]["studentsdata"][0]  , $html);
+			$html = str_replace( "###onoma###" ,$pd_one[0]["studentsdata"][1]  , $html);
+			$html = str_replace( "###sch_class###" ,$pd_one[0]["txtdata"]["sch_class"]  , $html);
+			$html = str_replace( "###eponimo_parent###" ,$pd_one[0]["studentsdata"][4]  , $html);
+			$html = str_replace( "###onoma_parent###" ,$pd_one[0]["studentsdata"][5]  , $html);
+			$html = str_replace( "###dieythinsi###" ,$pd_one[0]["studentsdata"][6]  , $html);
+			$html = str_replace( "###tk###" ,$pd_one[0]["studentsdata"][7]  , $html);
+			$html = str_replace( "###poli###" ,$pd_one[0]["studentsdata"][8]  , $html);
+			$html = str_replace( "###keimeno0###" ,$pd_one[0]["keimeno0"]  , $html);
+			$html = str_replace( "###keimeno1###" ,$pd_one[0]["keimeno1"]  , $html);
+			$html = str_replace( "###mydate###" ,$pd_one[0]["mydate"]  , $html);
+			$html = str_replace( "###totalap###" ,$pd_one[0]['totalap']  , $html);
+			$html = str_replace( "###lastmonthindex9###" ,$pd_one[0]["lastmonthindex9"]  , $html);
+			$html = str_replace( "###aformi###" ,$pd_one[0]["aformi"]  , $html);
+			$html = str_replace( "###protok###" ,$pd_one[0]["protok"]  , $html);
+			$html = str_replace( "###nowdate###" ,$pd_one[0]["nowdate"]  , $html);
+			$html = str_replace( "###teach_arthro###" ,$pd_one[0]["txtdata"]["teach_arthro"]  , $html);
+			$html = str_replace( "###teach_last###" ,$pd_one[0]["txtdata"]["teach_last"]  , $html);
+
+			$mail->Body = $html;
 			$mail->AddAddress ( $email );
-			$mail->AddStringAttachment ( $fileContent, $filename );
-			
+
 			if ($mail->Send ()) {
 				$mail_good [] = $studentsname;
 			} else {
@@ -513,12 +537,11 @@ if ($target == 'parents') {
 			}
 			// Clear all addresses and attachments for next loop
 			$mail->ClearAddresses ();
-			$mail->ClearAttachments ();
 		} // if ($email)
 	} // for ($i = 0; $i < count($pd); $i++)
-	
+
 	$mail->SmtpClose ();
-	
+
 	if (count ( $mail_good ) > 0) {
 		$_SESSION ['mail_good'] = $mail_good;
 	}
@@ -530,6 +553,7 @@ if ($target == 'parents') {
 	} else {
 		header ( 'Location: paperedit.php' );
 	}
+
 } // if ($target == 'parents')
 
 if ($target == 'print') {
@@ -540,9 +564,9 @@ if ($target == 'print') {
 if ($target == 'pdf' || $target == 'email') {
 	$paper->assign ( 'mypd', $pd );
 	$html = $paper->fetch ( 'paper_pdf.tpl' );
-	
-	
-	
+
+
+
 	$page_top = 25;
 	$page_bottom = 25;
 	$page_left = 15;

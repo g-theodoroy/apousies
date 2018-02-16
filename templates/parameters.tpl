@@ -13,6 +13,7 @@
             <tr><td colspan="2" align="center"><hr></td></tr>
             <tr><td colspan='2'><h3 class="c">Στοιχεία για ειδοποιητήριο</h3></td></tr>
             <tr><td ><h4 class="r nomargin">Όνομα σχολείου:</h4></td><td > <input name="sch_name" type="text"  size="20" value="{$sch_name}"></td></tr>
+            <tr><td ><h4 class="r nomargin">Τηλ σχολείου:</h4></td><td > <input name="sch_tel" type="text"  size="20" value="{$sch_tel}"></td></tr>
             <tr><td ><h4 class="r nomargin">Σχολικό έτος:</h4></td><td > <input name="sch_year" type="text"  size="20" value="{$sch_year}"></td></tr>
             <tr><td ><h4 class="r nomargin">Τάξη:</h4></td><td > <input name="sch_class" type="text"   size="5" value="{$sch_class}"></td></tr>
             <tr><td ><h4 class="r nomargin">Τμήμα:</h4></td><td ><input name="sch_tmima" type="text"   size="5" value="{$sch_tmima}"></td></tr>
