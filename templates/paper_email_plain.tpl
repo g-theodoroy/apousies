@@ -2,7 +2,7 @@
 Ημνία/Ώρα:  ###datetime###    ###protok###
 Από:        ###sch_name###    ###from###
 
-ΣΧ.ΜΟΝΑΔΑ:  ###sch_name###      ΣΧ.ΕΤΟΣ: ###sch_year###
+ΣΧ.ΜΟΝΑΔΑ:  ###sch_name###    ΣΧ.ΕΤΟΣ: ###sch_year###
 
 Χειριστής:  ###teach_name###    ###teacher_email###
 Ιδιότητα:   Υπεύθυνος Καθηγητής τμήματος ###sch_tmima###

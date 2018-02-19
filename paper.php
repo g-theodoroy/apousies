@@ -467,7 +467,6 @@ if ($target == 'parents') {
 	$mail->SMTPKeepAlive = true;
 	$mail->ConfirmReadingTo = $teacher_email;
     	$mail->addCustomHeader("Disposition-Notification-To: $teacher_email");
-	$mail->Subject = "Διαχείριση Απουσιών. Δελτίο επικοινωνίας Σχολείου - Γονέων";
 	
     if ($cc_sch) $mail->AddCC($sch_email);
     if ($cc_teacher) $mail->AddCC($teacher_email);
@@ -481,18 +480,17 @@ if ($target == 'parents') {
 			$pd_one [0] = $pd [$i];
 
             $mail->From = $sch_email;
-            $mail->Fromname = $pd_one[0]["txtdata"]["sch_name"];
+            $sch_name = $pd_one[0]["txtdata"]["sch_name"];
+            $mail->Fromname = $sch_name;
+            $mail->Subject = "$sch_name. Δελτίο επικοινωνίας Σχολείου - Γονέων";
 
 			$studentsname = $pd [$i] ['studentsdata'] [0] . "-" . $pd [$i] ['studentsdata'] [1];
-			$paper->assign ( 'mypd', $pd_one );
-			$paper->assign ( 'email', $email );
-			$paper->assign ( 'teacher_email', $teacher_email );
 			$html = file_get_contents( 'templates/paper_email_plain.tpl' );
 
 			$html = str_replace( "###datetime###" ,date("j/n/Y H:i:s")  , $html);
 			$html = str_replace( "###from###" ,$sch_email  , $html);
 			$html = str_replace( "###teacher_email###" ,$teacher_email  , $html);
-			$html = str_replace( "###sch_name###" ,$pd_one[0]["txtdata"]["sch_name"]  , $html);
+			$html = str_replace( "###sch_name###" , $sch_name , $html);
 			$html = str_replace( "###teach_name###" ,$pd_one[0]["txtdata"]["teach_name"]  , $html);
 			$html = str_replace( "###sch_tmima###" ,$pd_one[0]["txtdata"]["sch_tmima"]  , $html);
 			$html = str_replace( "###sch_tel###" ,$pd_one[0]["txtdata"]["sch_tel"]  , $html);
