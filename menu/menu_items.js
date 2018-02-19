@@ -1,5 +1,5 @@
 /* Tigra Menu items structure */
-/*var MENU_ITEMS = [
+/* var MENU_ITEMS = [
 	['Μενου', 'index.php',null,
 		['ΥποΜενου1', '#'],
 		['ΥποΜενου2', '#'],
@@ -7,11 +7,11 @@
 			['ΥποΜενου3-1', '#'],
 			['ΥποΜενου3-2',  null, null,
 				['ΥποΜενου3-2-1', '#'],
-				['ΥποΜενου3-2-2', '#'],	
-				['ΥποΜενου3-2-3', '#'],	
+				['ΥποΜενου3-2-2', '#'],
+				['ΥποΜενου3-2-3', '#'],
 			],
-			['ΥποΜενου3-3', '#'],	
-			['ΥποΜενου3-4', '#'],	
+			['ΥποΜενου3-3', '#'],
+			['ΥποΜενου3-4', '#'],
 		],
 		['ΥποΜενου4', '#']
 	],
@@ -21,110 +21,115 @@
 */
 
 var MENU_ITEMS_PARENT = [
-	['Αρχική', 'index.php',null,
+  ['Αρχική', 'index.php', null,
 		['Περισσότερα...', 'tour.php'],
 		['Οδηγίες Χρήσης', 'useful/odigies_apousies.pdf'],
 //		['Εγκατάσταση', 'install_guide.php'],
 		['Αρχικές Ρυθμίσεις', 'configure.php'],
 		['Χρήστες', 'subusers.php'],
-		['Δοκιμή (demo)', 'demologin.php'],
-	],
-	['Τμήματα', null ,null,
+		['Δοκιμή (demo)', 'demologin.php']
+  ],
+  ['Τμήματα', null, null,
 		['Επιλογή', 'class.php'],
-		['Ρυθμίσεις', 'parameters.php'],
-	],
-	['Μαθητές',null ,null,
+		['Ρυθμίσεις', 'parameters.php']
+  ],
+  ['Μαθητές', null, null,
 		['Εισαγωγή', 'newstudent.php'],
 		['Κατάλογος', 'students.php'],
 		['Επεξεργασία', 'editstudent.php'],
 		['Όλοι οι μαθητές', 'allstudents.php'],
 		['Εξαγωγή XLS', 'exportstudentsxls.php'],
-		['Εισαγωγή XLS', 'importstudentsxls.php'],
-	],
-	['Απουσίες', null ,null,
+		['Εισαγωγή XLS', 'importstudentsxls.php']
+  ],
+  ['Απουσίες', null, null,
 		['Καταχώρηση', 'apousies.php'],
-		['Δικαιολόγηση', 'dikaiologisi.php', null,
-			['Ιστορικό', 'dikhistory.php'],
-                ],
-		['Προϋπάρχουσες', 'apousies_pre.php'],
+    ['Δικαιολόγηση', 'dikaiologisi.php', null,
+			['Ιστορικό', 'dikhistory.php']
+    ],
+        ['Προϋπάρχουσες', 'apousies_pre.php', null,
+            ['xls από myschool', 'importmyschapousies_pre.php']
+        ],
 		['xls για myschool', 'apousies4myschxls.php'],
-	],
-	['Παρουσιολόγιο', null ,null,
-		['Τρίμηνα', 'parousiologio.php?t=g'],
-		['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
+		['xls από myschool', 'importmyschapousies.php']
+  ],
+  ['Παρουσιολόγιο', null, null,
+        ['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
 		['Λυκείου', 'parousiologio.php?t=l'],
-	],
+        ['Τρίμηνα', 'parousiologio.php?t=g']
+  ],
 	['Αθροίσματα', 'prints_sel.php'],
 	['Στατιστικα', 'statistics.php'],
-	['Ειδοποιητήρια', null ,null,
+  ['Ειδοποιητήρια', null, null,
 		['Εκτύπωση', 'paperedit.php'],
-		['Ιστορικό', null ,null,
+    ['Ιστορικό', null, null,
 			['Επεξεργασία', 'paperhistory.php'],
-			['Εκτύπωση', 'paperhistoryprint.php', {'tw':'_blank' }],
-		],
-		['Ρυθμίσεις', 'parameters.php'],
-	],
-	['Ετικέτες', 'labelsetup.php' ,null,
-	],
-	['Δεδομένα', null ,null,
+			['Εκτύπωση', 'paperhistoryprint.php', {'tw': '_blank' }]
+    ],
+		['Ρυθμίσεις', 'parameters.php']
+  ],
+  ['Ετικέτες', 'labelsetup.php', null
+  ],
+  ['Δεδομένα', null, null,
 		['Εξαγωγή', 'exportdata.php'],
-		['Εισαγωγή', 'importdata.php'],
-	],
-	['Επικοινωνία', 'mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών' ,null,
-	],
-];
+		['Εισαγωγή', 'importdata.php']
+  ],
+  ['Επικοινωνία', 'mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών', null
+  ]
+]
 
 var MENU_ITEMS_SUB = [
-              	['Αρχική', 'index.php',null,
+              	['Αρχική', 'index.php', null,
               		['Περισσότερα...', 'tour.php'],
-              		['Οδηγίες Χρήσης', 'useful/odigies_apousies.pdf'],
+              		['Οδηγίες Χρήσης', 'useful/odigies_apousies.pdf']
 //              		['Εγκατάσταση', 'install_guide.php'],
 //              		['Αρχικές Ρυθμίσεις', 'configure.php'],
 //              		['Δοκιμή (demo)', 'demologin.php'],
               	],
-              	['Τμήματα', null ,null,
+              	['Τμήματα', null, null,
               		['Επιλογή', 'class.php'],
-              		['Ρυθμίσεις', 'parameters.php'],
+              		['Ρυθμίσεις', 'parameters.php']
               	],
-              	['Μαθητές',null ,null,
+              	['Μαθητές', null, null,
 //              		['Εισαγωγή', 'newstudent.php'],
               		['Κατάλογος', 'students.php'],
 //              		['Επεξεργασία', 'editstudent.php'],
 //              		['Όλοι οι μαθητές', 'allstudents.php'],
-              		['Εξαγωγή XLS', 'exportstudentsxls.php'],
+              		['Εξαγωγή XLS', 'exportstudentsxls.php']
 //              		['Εισαγωγή XLS', 'importstudentsxls.php'],
               	],
-              	['Απουσίες', null ,null,
+              	['Απουσίες', null, null,
               		['Καταχώρηση', 'apousies.php'],
               		['Δικαιολόγηση', 'dikaiologisi.php', null,
-              			['Ιστορικό', 'dikhistory.php'],
-                              ],
-              		['Προϋπάρχουσες', 'apousies_pre.php'],
-            		['xls για myschool', 'apousies4myschxls.php'],
+              			['Ιστορικό', 'dikhistory.php']
+                ],
+              		['Προϋπάρχουσες', 'apousies_pre.php', null,
+                        ['xls από myschool', 'importmyschapousies_pre.php']
+                    ],
+                    ['xls για myschool', 'apousies4myschxls.php'],
+                    ['xls από myschool', 'importmyschapousies.php']
               	],
-              	['Παρουσιολόγιο', null ,null,
-                    	['Τρίμηνα', 'parousiologio.php?t=g'],
-                    	['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
-              		['Λυκείου', 'parousiologio.php?t=l'],
+              	['Παρουσιολόγιο', null, null,
+                    ['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
+                    ['Λυκείου', 'parousiologio.php?t=l'],
+              		['Τρίμηνα', 'parousiologio.php?t=g']
               	],
               	['Αθροίσματα', 'prints_sel.php'],
               	['Στατιστικα', 'statistics.php'],
-              	['Ειδοποιητήρια', null ,null,
+              	['Ειδοποιητήρια', null, null,
               		['Εκτύπωση', 'paperedit.php'],
-              		['Ιστορικό', null ,null,
+              		['Ιστορικό', null, null,
               			['Επεξεργασία', 'paperhistory.php'],
-              			['Εκτύπωση', 'paperhistoryprint.php', {'tw':'_blank' }],
+              			['Εκτύπωση', 'paperhistoryprint.php', {'tw': '_blank' }]
               		],
-              		['Ρυθμίσεις', 'parameters.php'],
+              		['Ρυθμίσεις', 'parameters.php']
               	],
-              	['Ετικέτες', 'labelsetup.php' ,null,
+              	['Ετικέτες', 'labelsetup.php', null
               	],
-              	['Δεδομένα', null ,null,
-              		['Εξαγωγή', 'exportdata.php'],
+              	['Δεδομένα', null, null,
+              		['Εξαγωγή', 'exportdata.php']
 //              	['Εισαγωγή', 'importdata.php'],
               	],
-              	['Επικοινωνία', 'mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών' ,null,
-              	],
-];
-
+              	['Επικοινωνία', 'mailto:g.theodoroygmail.com?subject=Διαχείριση Απουσιών', null
+              	]
+]
 

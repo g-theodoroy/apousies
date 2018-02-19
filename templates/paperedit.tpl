@@ -64,7 +64,7 @@
         </h4>
         <h4>
             <button type="submit" name="submitBtn" value="parents" onclick="frm.action='paper.php';frm.target='';return check_mail_to_parents();" title="Αποστολή e-mail στους κηδεμόνες που έχουν καταχωρημένο e-mail" >E-mail ΣΕ ΚΗΔΕΜΟΝΕΣ</button>&nbsp;
-            Κοινοποίηση σε: <input type="checkbox" name="cc_sch" checked>σχολείο</input>&nbsp;<input type="checkbox" name="cc_teacher" checked>καθηγητή</input>
+            Κοινοποίηση σε: <input type="checkbox" name="cc_sch" >σχολείο</input>&nbsp;<input type="checkbox" name="cc_teacher" checked>καθηγητή</input>
 
         </h4>
         <h4>

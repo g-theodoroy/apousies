@@ -379,16 +379,16 @@ $pre_apousies ["date"] ? $pre_date = $pre_apousies ["date"] : $pre_date = "";
 
 $pre_totap = 0;
 for($x = 0; $x < $apous_count; $x ++) {
-	$pre_totap += $pre_apous_array [$x];
+	$pre_totap += intval($pre_apous_array [$x]);
 }
 
 $pre_totdik = 0;
 for($x = 0; $x < $dik_count; $x ++) {
-	$pre_totdik += $pre_dik_array [$x];
+	$pre_totdik += intval($pre_dik_array [$x]);
 }
 
 $pre_totadik = $pre_totap - $pre_totdik;
-$pre_totoada = $pre_oa + $pre_da;
+$pre_totoada = intval($pre_oa) + intval($pre_da);
 if ($pre_totdik == 0)
 	$pre_totdik = "&nbsp;";
 if ($pre_totadik == 0)
@@ -400,7 +400,7 @@ $row3 = mysqli_fetch_assoc ( $result3 );
 
 $tottotap = $row3 ["sumtotap"];
 for($x = 0; $x < $apous_count; $x ++) {
-	$tottotap += $pre_apous_array [$x];
+	$tottotap += intval($pre_apous_array [$x]);
 }
 
 // $totap = $row3["sumap"];

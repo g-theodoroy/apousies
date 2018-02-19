@@ -461,17 +461,7 @@ $paper->assign ( 'paperdetails', $paperdetails );
 if ($target == 'parents') {
 	$mail_good = array ();
 	$mail_bad = array ();
-	
-	
-	
-	$page_top = 25;
-	$page_bottom = 25;
-	$page_left = 15;
-	$page_right = 15;
-	$page_format = 'A4';
-	$font_size = 10;
-	$orientation = 'P';
-	
+
 	$mail = new MyPHPMailer ();
 	
 	$mail->SMTPKeepAlive = true;
@@ -522,7 +512,11 @@ if ($target == 'parents') {
 			$html = str_replace( "###totalap###" ,$pd_one[0]['totalap']  , $html);
 			$html = str_replace( "###lastmonthindex9###" ,$pd_one[0]["lastmonthindex9"]  , $html);
 			$html = str_replace( "###aformi###" ,$pd_one[0]["aformi"]  , $html);
-			$html = str_replace( "###protok###" ,$pd_one[0]["protok"]  , $html);
+			if ($pd_one[0]["protok"]){
+                $html = str_replace( "###protok###" ,"Αρ.Πρωτ: " . $pd_one[0]["protok"]  , $html);
+			}else{
+                $html = str_replace( "###protok###" ,""  , $html);
+			}
 			$html = str_replace( "###nowdate###" ,$pd_one[0]["nowdate"]  , $html);
 			$html = str_replace( "###teach_arthro###" ,$pd_one[0]["txtdata"]["teach_arthro"]  , $html);
 			$html = str_replace( "###teach_last###" ,$pd_one[0]["txtdata"]["teach_last"]  , $html);
