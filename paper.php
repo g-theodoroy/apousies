@@ -114,7 +114,9 @@ $query = "SELECT `email` FROM `users` WHERE `username` = '$parent' ;";
 $result = mysqli_query ( $link, $query );
 $row = mysqli_fetch_assoc ( $result );
 $sch_email = $row ["email"];
-$query = "SELECT `email` FROM `users` WHERE `username` = '$user' ;";
+$query = "SELECT `email` FROM `users` join `tmimata`
+            on `users`.`username` = `tmimata`.`username`
+            WHERE `users`.`username`<>`users`.`groupname` and `groupname`='$parent' and `tmima`='$tmima' ;";
 $result = mysqli_query ( $link, $query );
 $row = mysqli_fetch_assoc ( $result );
 $teacher_email = $row ["email"];
@@ -261,7 +263,7 @@ if ($apover != '') {
 		// echo $query . "<hr>\n";
 	}
 	if ($student == "new") {
-		
+
 		$t3dikstr = str_replace ( "t2", "t3", $t2dikstr );
 
 		$query = "SELECT
@@ -384,27 +386,27 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	$pd [$i] ['aformi'] = $aformi;
 	$pd [$i] ['protok'] = $protok;
 	$pd [$i] ['nowdate'] = $nowdate;
-	
+
 	// συνδέομαι με τη βάση
 	include ("includes/dbinfo.inc.php");
-	
+
 	if ($history == "1") {
-		
+
 		$totalap = $row ["sumap"];
 		$histam = $row ["am"];
 		$histquery = "INSERT INTO `paperhistory` (`protok`, `mydate`, `am`, `apous`, `user` ) VALUES ('$protok','$histdate','$histam','$totalap','$parent');";
 		$histresult = mysqli_query ( $link, $histquery );
-		
+
 		// echo "$histquery <hr>";
-		
+
 		if (! $histresult) {
 			$errorText = mysqli_error ( $link );
 			echo "1 $errorText<hr>";
 		}
-		
+
 		$_SESSION ["havechanges"] = true;
 	}
-	
+
 	if ($protokctrl == 2) {
 		$protocolyear = date ( "Y" );
 		$protocoldate = date ( "Ymd" );
@@ -414,7 +416,7 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 		$strkid = $studentsdata [5] . " " . $studentsdata [4];
 
 		$protocolquery = "INSERT INTO `protocols`
-						(`user_id`, `protocolnum`, `protocoldate`, `etos`,	 `fakelos`,   `thema`, 	    `in_num`, `in_date`,
+						(`user_id`, `protocolnum`, `protocoldate`, `etos`, `fakelos`, `thema`, 	    `in_num`, `in_date`,
 						`in_topos_ekdosis`, `in_arxi_ekdosis`, `in_paraliptis`, `diekperaiosi`, `in_perilipsi`, `out_date`,
 						`diekp_date`,  `sxetiko`, `out_to`,  `out_perilipsi`, 				`keywords`, `paratiriseis`, `flags`) VALUES
 						( $entryby, $protok, 	   $protocoldate,  $protocolyear, 'Φ.$tmima', 'ΕΞΕΡΧΟΜΕΝΟ', '',	       NULL,
@@ -424,7 +426,7 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 
 		array_push ( $pinquery, $protocolquery );
 	}
-	
+
 	if ($protok && $protokctrl > 0) {
 		$protok ++;
 		if (isset ( $newid ))
@@ -463,18 +465,23 @@ if ($target == 'parents') {
 	$mail_bad = array ();
 
 	$mail = new MyPHPMailer ();
+
+    $mail->SMTPKeepAlive = true;
+    if ($teacher_email){
+        $mail->ConfirmReadingTo = $teacher_email;
+        $mail->addCustomHeader("Disposition-Notification-To: $teacher_email");
+    }else{
+        $mail->ConfirmReadingTo = $sch_email;
+        $mail->addCustomHeader("Disposition-Notification-To: $sch_email");
+    }
 	
-	$mail->SMTPKeepAlive = true;
-	$mail->ConfirmReadingTo = $teacher_email;
-    	$mail->addCustomHeader("Disposition-Notification-To: $teacher_email");
-	
-    if ($cc_sch) $mail->AddCC($sch_email);
-    if ($cc_teacher) $mail->AddCC($teacher_email);
+    if ($cc_sch && $sch_email) $mail->AddCC($sch_email);
+    if ($cc_teacher && $teacher_email) $mail->AddCC($teacher_email);
 
 	for($i = 0; $i < count ( $pd ); $i ++) {
-		
+
 		$email = $pd [$i] ['studentsdata'] [12];
-		
+
 		if ($email) { // an exei email
 			$pd_one = array ();
 			$pd_one [0] = $pd [$i];
@@ -566,7 +573,7 @@ if ($target == 'pdf' || $target == 'email') {
 	$page_format = 'A4';
 	$font_size = 10;
 	$orientation = 'P';
-	
+
 	$mpdf = new mPDF ( '', // mode - default ''
 	$page_format, // format - A4, for example, default ''
 	$font_size, // font size - default 0
@@ -578,23 +585,23 @@ if ($target == 'pdf' || $target == 'email') {
 	0, // margin header
 	0, // margin footer
 	$orientation ); // L - landscape, P - portrait
-	
+
 	$mpdf->WriteHTML ( $html );
-	
+
 	$filename = "Ειδοποιητήρια_{$parent}_{$tmima}_" . str_replace ( '/', '-', $nowdate ) . ".pdf";
-	
+
 	if ($target == 'email') {
 		$fileContent = $mpdf->Output ( $filename, 'S' );
-		
+
 		$mail = new MyPHPMailer ();
-		
+
 		$mail->Subject = "Διαχείριση Απουσιών. Αποστολή Ειδοποιητηρίων";
 		$mail->Body = "Στο επισυναπτόμενο αρχείο βρίσκονται σε μορφή pdf τα ειδοποιητήρια σας.";
 		$mail->AddAddress ( $teacher_email );
 		$mail->AddStringAttachment ( $fileContent, " $filename" );
-		
+
 		$okmail = $mail->Send ();
-		
+
 		if ($okmail) {
 			header ( 'Location: paperedit.php?m=1' );
 		} else {

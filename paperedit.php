@@ -94,6 +94,36 @@ if (isset($mail_bad)) {
 
 // συνδέομαι με τη βάση
 include ("includes/dbinfo.inc.php");
+$query = "SELECT `email` FROM `users` WHERE `username` = '$parent' ;";
+$result = mysqli_query ( $link, $query );
+$row = mysqli_fetch_assoc ( $result );
+$sch_email = $row ["email"];
+$query = "SELECT `email` FROM `users` join `tmimata`
+            on `users`.`username` = `tmimata`.`username`
+            WHERE `users`.`username`<>`users`.`groupname` and `groupname`='$parent' and `tmima`='$tmima' ;";
+$result = mysqli_query ( $link, $query );
+$row = mysqli_fetch_assoc ( $result );
+$teacher_email = $row ["email"];
+mysqli_close ( $link );
+
+
+$chk_sch_email = '';
+if ($sch_email) $chk_sch_email = "checked";
+$chk_teacher_email = '';
+if ($teacher_email) {
+    if ($teacher_email == $sch_email){
+        $chk_sch_email = "checked";
+        $chk_teacher_email = ""; 
+    }else{
+        $chk_sch_email = "";
+        $chk_teacher_email = "checked"; 
+    }
+}
+$smarty->assign ( 'chk_sch_email', $chk_sch_email );
+$smarty->assign ( 'chk_teacher_email', $chk_teacher_email );
+
+// συνδέομαι με τη βάση
+include ("includes/dbinfo.inc.php");
 
 // $query = "SELECT `students`.`am`, `students`.`epitheto`, `students`.`onoma`, `students`.`patronimo` ,SUM(`apousies`.`ap`)AS sumap, SUM(`apousies`.`apk`)AS sumapk, SUM(`apousies`.`ape`)AS sumape
 // FROM `students` left JOIN `apousies` ON (`students`.`user` = `apousies`.`user` AND `students`.`am` = `apousies`.`student_am` )
