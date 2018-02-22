@@ -29,6 +29,11 @@ var MENU_ITEMS_PARENT = [
 		['Χρήστες', 'subusers.php'],
 		['Δοκιμή (demo)', 'demologin.php']
   ],
+  ['xls από myschool', null, null,
+        ['Μαθητές', 'importmyschstudents.php'],
+        ['Απουσίες', 'importmyschapousies.php'],
+        ['Προϋπάρχουσες', 'importmyschapousies_pre.php']
+  ],
   ['Τμήματα', null, null,
 		['Επιλογή', 'class.php'],
 		['Ρυθμίσεις', 'parameters.php']
@@ -46,11 +51,8 @@ var MENU_ITEMS_PARENT = [
     ['Δικαιολόγηση', 'dikaiologisi.php', null,
 			['Ιστορικό', 'dikhistory.php']
     ],
-        ['Προϋπάρχουσες', 'apousies_pre.php', null,
-            ['xls από myschool', 'importmyschapousies_pre.php']
-        ],
-		['xls για myschool', 'apousies4myschxls.php'],
-		['xls από myschool', 'importmyschapousies.php']
+        ['Προϋπάρχουσες', 'apousies_pre.php',],
+		['xls για myschool', 'apousies4myschxls.php']
   ],
   ['Παρουσιολόγιο', null, null,
         ['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
@@ -85,6 +87,11 @@ var MENU_ITEMS_SUB = [
 //              		['Αρχικές Ρυθμίσεις', 'configure.php'],
 //              		['Δοκιμή (demo)', 'demologin.php'],
               	],
+              	['xls από myschool', null, null,
+//              		['Μαθητές', 'importmyschstudents.php'],
+              		['Απουσίες', 'importmyschapousies.php'],
+              		['Προϋπάρχουσες', 'importmyschapousies_pre.php']
+              	],
               	['Τμήματα', null, null,
               		['Επιλογή', 'class.php'],
               		['Ρυθμίσεις', 'parameters.php']
@@ -102,11 +109,8 @@ var MENU_ITEMS_SUB = [
               		['Δικαιολόγηση', 'dikaiologisi.php', null,
               			['Ιστορικό', 'dikhistory.php']
                 ],
-              		['Προϋπάρχουσες', 'apousies_pre.php', null,
-                        ['xls από myschool', 'importmyschapousies_pre.php']
-                    ],
-                    ['xls για myschool', 'apousies4myschxls.php'],
-                    ['xls από myschool', 'importmyschapousies.php']
+                    ['Προϋπάρχουσες', 'apousies_pre.php',],
+                    ['xls για myschool', 'apousies4myschxls.php']
               	],
               	['Παρουσιολόγιο', null, null,
                     ['Γυμνάσιο-Α΄Λυκείου', 'parousiologio.php?t=a'],
