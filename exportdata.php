@@ -259,8 +259,7 @@ if (isset ( $_POST ["send"] ) || isset ( $_POST ["sendmail"] )) {
 		$parameters = get_all_parameters ( $parent );
 		
 		$sqlparameters = '';
-		
-		if ($parameters) {
+		if($parameters){
             foreach ( $parameters as $tmi => $row ) {
                 foreach ( $row as $key => $value ) {
                     $sqlparameters .= "('$tmi',";

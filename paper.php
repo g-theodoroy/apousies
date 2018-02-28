@@ -17,6 +17,13 @@ isset ( $_POST ['paperdetails'] ) ? $paperdetails = trim ( $_POST ['paperdetails
 isset ( $_POST ['submitBtn'] ) ? $target = $_POST ['submitBtn'] : $target = 'print';
 isset ( $_POST ['cc_sch'] ) ? $cc_sch = 1 : $cc_sch = 0;
 isset ( $_POST ['cc_teacher'] ) ? $cc_teacher = 1 : $cc_teacher = 0;
+isset ( $_POST ['smsusername'] ) ? $smsusername = $_POST ['smsusername'] : $smsusername = '';
+isset ( $_POST ['smspassword'] ) ? $smspassword = $_POST ['smspassword'] : $smspassword = '';
+isset ( $_POST ['paroxos'] ) ? $paroxos = $_POST ['paroxos'] : $paroxos = '';
+isset ( $_POST ['smssendto'] ) ? $smssendto = $_POST ['smssendto'] : $smssendto = '';
+isset ( $_POST ['smssender'] ) ? $smssender = $_POST ['smssender'] : $smssender = '';
+isset ( $_POST ['emailsmsreport'] ) ? $emailsmsreport = $_POST ['emailsmsreport'] : $emailsmsreport = '';
+
 
 if ($protokctrl == 2) {
 	if (file_exists ( "includes/protocolapousies.inc.php" )) {
@@ -317,6 +324,9 @@ mysqli_close ( $link );
 
 $num = mysqli_num_rows ( $result );
 
+
+if (! $num) header("Location: {$_SERVER['HTTP_REFERER']}");
+
 $i = 0;
 while ( $row = mysqli_fetch_assoc ( $result ) ) {
 
@@ -463,7 +473,9 @@ $paper->assign ( 'paperdetails', $paperdetails );
 if ($target == 'parents') {
 	$mail_good = array ();
 	$mail_bad = array ();
-
+    $sch_name = '';
+    $sch_year = '';
+    
 	$mail = new MyPHPMailer ();
 
     $mail->SMTPKeepAlive = true;
@@ -488,13 +500,17 @@ if ($target == 'parents') {
 
             $mail->From = $sch_email;
             $sch_name = $pd_one[0]["txtdata"]["sch_name"];
+            $sch_year = $pd_one[0]["txtdata"]["sch_year"];
             $mail->Fromname = $sch_name;
             $mail->Subject = "$sch_name. Δελτίο επικοινωνίας Σχολείου - Γονέων";
 
-			$studentsname = $pd [$i] ['studentsdata'] [0] . "-" . $pd [$i] ['studentsdata'] [1];
+			$datetime = date("j/n/Y H:i:s");
+			$studentsname = $pd_one[0] ['studentsdata'] [0] . " " . $pd_one[0] ['studentsdata'] [1];
+			$parentsname = $pd_one[0] ['studentsdata'] [4] . " " . $pd_one[0] ['studentsdata'] [5];
+			$totalap = $pd_one[0]['totalap'];
 			$html = file_get_contents( 'templates/paper_email_plain.tpl' );
 
-			$html = str_replace( "###datetime###" ,date("j/n/Y H:i:s")  , $html);
+			$html = str_replace( "###datetime###" ,$datetime  , $html);
 			$html = str_replace( "###from###" ,$sch_email  , $html);
 			$html = str_replace( "###teacher_email###" ,$teacher_email  , $html);
 			$html = str_replace( "###sch_name###" , $sch_name , $html);
@@ -502,7 +518,7 @@ if ($target == 'parents') {
 			$html = str_replace( "###sch_tmima###" ,$pd_one[0]["txtdata"]["sch_tmima"]  , $html);
 			$html = str_replace( "###sch_tel###" ,$pd_one[0]["txtdata"]["sch_tel"]  , $html);
 			$html = str_replace( "###email###" ,$email  , $html);
-			$html = str_replace( "###sch_year###" ,$pd_one[0]["txtdata"]["sch_year"]  , $html);
+			$html = str_replace( "###sch_year###" ,$sch_year  , $html);
 			$html = str_replace( "###eponimo###" ,$pd_one[0]["studentsdata"][0]  , $html);
 			$html = str_replace( "###onoma###" ,$pd_one[0]["studentsdata"][1]  , $html);
 			$html = str_replace( "###sch_class###" ,$pd_one[0]["txtdata"]["sch_class"]  , $html);
@@ -530,9 +546,9 @@ if ($target == 'parents') {
 			$mail->AddAddress ( $email );
 
 			if ($mail->Send ()) {
-				$mail_good [] = $studentsname;
+				$mail_good [] = array($datetime,$parentsname, $studentsname, $totalap);
 			} else {
-				$mail_bad [] = $studentsname;
+				$mail_bad [] = array($datetime,$parentsname, $studentsname, $totalap);;
 			}
 			// Clear all addresses and attachments for next loop
 			$mail->ClearAddresses ();
@@ -540,20 +556,380 @@ if ($target == 'parents') {
 	} // for ($i = 0; $i < count($pd); $i++)
 
 	$mail->SmtpClose ();
+	
 
-	if (count ( $mail_good ) > 0) {
-		$_SESSION ['mail_good'] = $mail_good;
-	}
-	if (count ( $mail_bad ) > 0) {
-		$_SESSION ['mail_bad'] = $mail_bad;
-	}
 	if (count ( $mail_good ) > 0 || count ( $mail_bad ) > 0) {
-		header ( 'Location: paperedit.php?m=1' );
-	} else {
-		header ( 'Location: paperedit.php' );
+	
+	$report = new Smarty();
+	$report->assign('sch_name',$sch_name);
+	$report->assign('sch_year',$sch_year);
+	$report->assign('mail_good',$mail_good);
+	$report->assign('mail_bad',$mail_bad);
+	
+	$html = $report->fetch ( 'email_report_pdf.tpl' );
+
+    if ($emailsmsreport && $sch_email){
+
+    $mailreport = new MyPHPMailer ();
+
+    $mailreport->Subject = "Διαχείριση Απουσιών. Αναφορά αποστολής email σε κηδεμόνες_{$tmima}_" . date("j-n-Y") . "";
+    $mailreport->isHTML(true);
+    $mailreport->Body = $html;
+    $mailreport->AddAddress ( $sch_email );
+    if ($teacher_email)$mailreport->AddAddress ( $teacher_email );
+    $okmail = $mailreport->Send ();
+	}
+	
+	$page_top = 25;
+	$page_bottom = 25;
+	$page_left = 15;
+	$page_right = 15;
+	$page_format = 'A4';
+	$font_size = 10;
+	$orientation = 'P';
+
+	$mpdf = new mPDF ( '', // mode - default ''
+	$page_format, // format - A4, for example, default ''
+	$font_size, // font size - default 0
+	'', // default font family
+	$page_left, // margin_left
+	$page_right, // margin right
+	$page_top, // margin top
+	$page_bottom, // margin bottom
+	0, // margin header
+	0, // margin footer
+	$orientation ); // L - landscape, P - portrait
+
+	$mpdf->WriteHTML ( $html );
+
+	$filename = "Αναφορά_αποστολής_email_{$parent}_{$tmima}_" . date("j-n-Y") . ".pdf";
+
+	$mpdf->Output ( $filename, 'D' );
+    exit ();
+	
 	}
 
 } // if ($target == 'parents')
+
+
+if ($target == 'sendsms'){
+    
+    $smsdata = array();
+    $sch_name = '';
+    $sch_year = '';
+    $sms_good = array();
+    $sms_bad = array();
+    $balance = '';
+
+
+	for($i = 0; $i < count ( $pd ); $i ++) {
+
+		$email = $pd [$i] ['studentsdata'] [12];
+		$mobile = $pd [$i] ['studentsdata'] [10];
+
+
+        if (! $mobile)continue;
+		if ($smssendto == "sms2mob"){
+            if ($email)continue;
+		}
+		
+			$pd_one = array ();
+			$pd_one [0] = $pd [$i];
+
+            $sch_name = $pd_one[0]["txtdata"]["sch_name"];
+			$studentsname = $pd_one[0] ['studentsdata'] [0] . " " . $pd_one[0] ['studentsdata'] [1];
+			$parentsname = $pd_one[0] ['studentsdata'] [4] . " " . $pd_one[0] ['studentsdata'] [5];
+			$totalap = $pd_one[0]['totalap'];
+
+			$html = file_get_contents( 'templates/paper_sms.tpl' );
+
+			$html = str_replace( "###sch_name###" , $sch_name , $html);
+			$html = str_replace( "###teach_name###" ,$pd_one[0]["txtdata"]["teach_name"]  , $html);
+			$html = str_replace( "###sch_tmima###" ,$pd_one[0]["txtdata"]["sch_tmima"]  , $html);
+			$html = str_replace( "###eponimo###" ,$pd_one[0]["studentsdata"][0]  , $html);
+			$html = str_replace( "###onoma###" ,$pd_one[0]["studentsdata"][1]  , $html);
+			$html = str_replace( "###eponimo_parent###" ,$pd_one[0]["studentsdata"][4]  , $html);
+			$html = str_replace( "###onoma_parent###" ,$pd_one[0]["studentsdata"][5]  , $html);
+			$html = str_replace( "###keimeno0###" ,$pd_one[0]["keimeno0"]  , $html);
+			$html = str_replace( "###mydate###" ,$pd_one[0]["mydate"]  , $html);
+			$html = str_replace( "###totalap###" ,$pd_one[0]['totalap']  , $html);
+
+			$html = mb_strtoupper($html, 'UTF-8');
+            $html = strtr($html, "ΆΈΉΊΪΌΎΫΏ", "ΑΕΗΙΙΟΥΥΩ");
+            
+            $smsdata[] = array ($mobile, $html, $studentsname, $parentsname, $totalap );
+    }
+    
+    
+    if ( ! count($smsdata)) header("Location: {$_SERVER['HTTP_REFERER']}");
+
+    if($paroxos == "sms-marketing.gr"){
+        $username = $smsusername; //username of smscanal account
+        $password = $smspassword; //password of smscanal account
+        $sender_name = $smssender; //the name that will be displayed as sender of the sms
+        $sms_good[] = array( "Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "mobile-no", "messageid");
+        $sms_bad[] = array("Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "error-code", "error-description");
+
+        foreach ($smsdata as $smsone){
+
+            $mobiles = "30" . $smsone[0] ; //the mobile number to send the sms, with 30 in front. Can be one or more (up to 500) separated with ,(comma).
+            $message = urlencode(stripslashes($smsone[1])); //the message of sms, url encoded.
+
+            //the url to send the request to api
+            $URL="http://messaging.smscanal.com/sms/sendsms.jsp?";
+            $http_request="user=".$username."&password=".$password."&mobiles=".$mobiles."&senderid=".$sender_name."&sms=".$message;
+
+            $ch = curl_init($URL);   
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $http_request);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+
+            $output = curl_exec($ch);
+            curl_close($ch);
+            
+            try{
+                $output = simplexml_load_string($output); 
+                /*********successful xml response********
+                <smslist>
+                    <sms>
+                        <smsclientid>XXXXXXXX</smsclientid>
+                        <messageid>XXXXXXXX</messageid>
+                        <mobile-no>+3069XXXXXXXX</mobile-no>
+                    </sms>
+                </smslist>
+                
+                *********UNsuccessful xml response********	
+                <smslist>
+                    <error>
+                        <smsclientid>X</smsclientid>
+                        <error-code>-XXXXX</error-code>
+                        <error-description>XXXXXX</error-description>
+                        <mobile-no>XXXXX</mobile-no>
+                        <error-action>X</error-action>
+                    </error>
+                </smslist>*/
+            }catch(Exception $e){
+                $curlerror = "failed";
+            }
+            
+            $json = json_encode($output);
+            $arrsms = json_decode($json,TRUE);
+            
+            if(isset($arrsms["sms"]) && $curlerror != "failed") {
+                foreach ($arrsms as $sms){
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_good[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $sms["mobile-no"], $sms["messageid"] ) ; 
+                }
+            }
+
+            
+            if(isset($arrsms["error"]) && $curlerror != "failed") {
+                foreach ($arrsms as $error){
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_bad[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $error["error-code"], $error["error-description"] ) ; 
+                }
+            }
+            
+
+        } //foreach ($smsdata as $smsone){
+    
+
+        //ερώτηση υπολοίπου
+        $URL="http://messaging.smscanal.com/sms/smscredit.jsp?";
+        $http_request="user=".$username."&password=".$password;
+            
+        $ch = curl_init($URL);   
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $http_request);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_ENCODING, 'UTF-8');
+
+        $output = curl_exec($ch);
+        curl_close($ch);
+     
+     
+        try{
+            $output = simplexml_load_string($output); 
+            /*********successful xml response********
+            <sms>    
+                <accountexpdate>26/02/2019</accountexpdate>
+                <balanceexpdate>22/12/2018</balanceexpdate>
+                <credit>1.64</credit>
+            </sms>	                
+            *********UNsuccessful xml response********	
+            <sms>
+                <error>Invalid username or password</error>
+            </sms>*/
+        }catch(Exception $e){
+            $curlerror = "failed";
+        }
+     
+        $json = json_encode($output);
+        $arrcredits = json_decode($json,TRUE);
+        $balance = $arrcredits["credit"];
+            
+    }// if($paroxos == "sms-marketing")
+   
+    if($paroxos == "easysms.gr"){
+        $username = $smsusername; //username of easysms account
+        $password = $smspassword; //password of easysms account
+        $sender_name = $smssender; //the name that will be displayed as sender of the sms
+        $sms_good[] = array( "Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "mobile-no", "messageid", "remarks");
+        $sms_bad[] = array("Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "mobile-no", "error", "remarks");
+        
+        // βρίσκω το API key
+        $URL = "https://easysms.gr/api/key/get?username=" . $username . "&password=" . $password  . "&type=v2";
+		$fp = fopen( $URL, 'r' );
+		$key = fread( $fp, 1024 );
+		
+		if ($key){
+        foreach ($smsdata as $smsone){
+
+            $to = "30" . $smsone[0] ; //the mobile number to send the sms, with 30 in front.
+            $message = urlencode(stripslashes($smsone[1])); //the message of sms, url encoded.
+
+            $URL = "https://easysms.gr/api/sms/send?key=" . $key . "&to=" . $to;
+            $URL .= "&text=" . $message  . '&from=' . urlencode($sender_name) . "&type=json";
+            $fp = fopen( $URL, 'r' );
+            $json = fread( $fp, 1024 );
+            
+            $arrsms = json_decode($json,TRUE);
+            
+            
+            if(isset($arrsms["status"]) && $arrsms["status"] == "1" ) {
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_good[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $to , $arrsms["id"], $arrsms["remarks"] ) ; 
+            }
+
+
+            
+            if(isset($arrsms["status"]) && $arrsms["status"] !== "1" ) {
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_bad[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $to , $arrsms["error"], $arrsms["remarks"] ) ; 
+            }
+            $balance = $arrsms["balance"];
+         } 
+         }else{
+            $datetime = date("j/n/Y H:i:s");
+            $sms_bad[] = array($datetime, "" , "" , "", "" , "101", "Error: Check your credentials" ) ;
+         }
+
+
+    } // if($paroxos == "easysms")
+
+    if($paroxos == "sms4u.eu"){
+        $username = $smsusername; //username of sms4u account
+        $password = $smspassword; //password of sms4u account
+        $sender_name = $smssender; //the name that will be displayed as sender of the sms
+        $gateway = 2;
+        if (!ctype_digit($sender_name)) $gateway = 3;
+        $sms_good[] = array( "Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "mobile-no", "count", "cost", "messageid");
+        $sms_bad[] = array("Ημνία", "Μαθητής/τρια", "Κηδεμόνας", "Απουσίες", "error-code", "error-description");
+
+        $password = urlencode($password);
+
+        foreach ($smsdata as $smsone){
+
+            $mobiles = "30" . $smsone[0] ; //the mobile number to send the sms, with 30 in front
+            $message = urlencode(stripslashes($smsone[1])); //the message of sms, url encoded.
+            
+            //echo $smsone[1] . "<hr>";
+            //echo $message . "<hr>";
+            
+            
+            //the url to send the request to api
+            $URL="https://members.sms4u.eu/api/sendsms?";
+            $URL.="username=".$username."&password=".$password."&sender=".$sender_name."&recipient=".$mobiles."&smsmessage=".$message."&gateway=".$gateway;
+
+             $fp = fopen( $URL, 'r' );
+            $json = fread( $fp, 1024 );
+            
+            $arrsms = json_decode(json_decode($json,TRUE),TRUE);
+            
+            
+            if(isset($arrsms["response"]) && $arrsms["response"] == "OK" ) {
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_good[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $arrsms["recipient"], $arrsms["count"], $arrsms["cost"], $arrsms["id"] ) ; 
+            }
+
+
+            
+            if(isset($arrsms["response"]) && $arrsms["response"] == "error" ) {
+                    $datetime = date("j/n/Y H:i:s");
+                    $sms_bad[] = array($datetime, $smsone[2] , $smsone[3], $smsone[4], $arrsms["code"], $arrsms["message"] ) ; 
+            }
+
+        }
+    
+        $URL="https://members.sms4u.eu/api/balance?username=".$username."&password=".$password ;
+        $fp = fopen( $URL, 'r' );
+        $json = fread( $fp, 1024 );
+        $arrbalance = json_decode(json_decode($json,TRUE),TRUE);
+        $balance = $arrbalance["Balance"];
+      
+    } // if($paroxos == "sms4u")
+   
+    // δημιουργία αναφοράς
+    if(count($sms_good) > 1 || count($sms_bad) > 1){
+
+	$report = new Smarty();
+	$report->assign('sch_name',$sch_name);
+	$report->assign('sch_year',$sch_year);
+	$report->assign('sms_good',$sms_good);
+	$report->assign('sms_bad',$sms_bad);
+	$report->assign('balance',$balance);
+	$report->assign('paroxos',$paroxos);
+	
+	$html = $report->fetch ( 'sms_report_pdf.tpl' );
+
+    if ($sch_email){
+
+    $mailreport = new MyPHPMailer ();
+
+    $mailreport->Subject = "Διαχείριση Απουσιών. Αναφορά αποστολής sms σε κηδεμόνες_{$tmima}_" . date("j-n-Y") . "";
+    $mailreport->isHTML(true);
+    $mailreport->Body = $html;
+    $mailreport->AddAddress ( $sch_email );
+    if ($teacher_email)$mailreport->AddAddress ( $teacher_email );
+    $okmail = $mailreport->Send ();
+	}
+	
+	$page_top = 25;
+	$page_bottom = 25;
+	$page_left = 15;
+	$page_right = 15;
+	$page_format = 'A4';
+	$font_size = 10;
+	$orientation = 'P';
+
+	$mpdf = new mPDF ( '', // mode - default ''
+	$page_format, // format - A4, for example, default ''
+	$font_size, // font size - default 0
+	'', // default font family
+	$page_left, // margin_left
+	$page_right, // margin right
+	$page_top, // margin top
+	$page_bottom, // margin bottom
+	0, // margin header
+	0, // margin footer
+	$orientation ); // L - landscape, P - portrait
+
+	$mpdf->WriteHTML ( $html );
+
+	$filename = "Αναφορά_αποστολής_sms_{$parent}_{$tmima}_" . date("j-n-Y") . ".pdf";
+
+	$mpdf->Output ( $filename, 'D' );
+    exit ();
+	}
+	
+
+} //if ($target == 'sendsms')
+
 
 if ($target == 'print') {
 	$paper->assign ( 'mypd', $pd );

@@ -4,13 +4,13 @@
 <div class="column span-17 prepend-3 last " align="center" >
 
     <form name="frm" method="POST" action='' onsubmit=" return validate_form(this);">
-        <IMG class="tour dropshadow" src="{$smarty.session.images_prefix}print-logo.png" height="150px" >
+        <IMG class="tour dropshadow" src="{$smarty.session.images_prefix}email-logo.png" height="150px" >
         <table>
             <tr>
                 <td colspan='3'>
                     <h4 class="nomargin" align="center">
                         <SELECT name="student" id="student" onchange="select_control_apover();">
-                            <option value="">ΕΠΙΛΟΓΗ ΜΑΘΗΤΗ ΓΙΑ ΕΚΤΥΠΩΣΗ ΕΙΔΟΠΟΙΗΤΗΡΙΟΥ</option>
+                            <option value="">ΕΠΙΛΟΓΗ ΜΑΘΗΤΗ ΓΙΑ ΑΠΟΣΤΟΛΗ EMAIL</option>
                             <option value="">&nbsp;</option>
                             <option value="all">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ΟΛΟΙ ΟΣΟΙ ΕΧΟΥΝ ΚΑΝΕΙ ΑΠΟΥΣΙΕΣ ΠΑΝΩ ΑΠΟ</option>
                             <option value="new">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ΜΟΝΟ ΤΑ ΝΕΑ ΕΙΔΟΠΟΙΗΤΗΡΙΑ</option>
@@ -33,16 +33,14 @@
                 <td colspan='2'><h4 class="nomargin" align="center">Υπολόγισε τις απουσίες μέχρι τις</h4></td>
                 <td><input name='lastdate' id='lastdate' value="{$smarty.now|date_format:"%e/%-m/%Y"}" size="10" style="text-align : center; background-color : #fff;"/></td>
             </tr>
+            <!--
             <tr>
                 <td colspan='2'><h4 class="nomargin" align="center">Ημερομηνία έκδοσης ειδοποιητηρίου</h4></td>
                 <td><input name='paperdate' id='paperdate' value="{$smarty.now|date_format:"%e/%-m/%Y"}" size="10" style="text-align : center; background-color : #fff;"/></td>
             </tr>
+            -->
             <tr>
-                <td colspan='2'><h4 class="nomargin" align="center">Παρουσίαση απουσιών</h4></td>
-                <td><select name="paperdetails" id="paperdetails"><option value="0">ΠΕΡΙΛΗΠΤΙΚΑ</option><option value="1">ΑΝΑΛΥΤΙΚΑ</option></select></td>
-            </tr>
-            <tr>
-                <td colspan='2'><h4 class="nomargin" align="center">Να αποθηκευτούν τα ειδοποιητήρια στο ιστορικό</h4></td>
+                <td colspan='2'><h4 class="nomargin" align="center">Να αποθηκευτούν οι αποστολες email στο ιστορικό</h4></td>
                 <td><select name='history' id='history'><option value="0">ΟΧΙ</option><option value="1">ΝΑΙ</option></select></td>
             </tr>
         </table>
@@ -54,15 +52,10 @@
                 <h4 style='color : red;'>Αποτυχημένη αποστολή email ειδοποιητηρίων</h4>
             {/if}
         {/if}
-        <h4 align="center">
-            <button type="submit" name="submitBtn" value="print" onclick="frm.action='paper.php';frm.target='_blank';">ΕΚΤΥΠΩΣΗ</button>&nbsp;
-            <button type="submit" name="submitBtn" value="pdf" onclick="frm.action='paper.php';frm.target='';">ΕΞΑΓΩΓΗ PDF</button>
-            {if $smarty.session.parentUser}
-            &nbsp;
-            <!--
-            <button type="submit" name="submitBtn" value="email" onclick="frm.action='paper.php';frm.target='';">PDF σε E-mail </button>
-            -->
-            {/if}
+        <h4>
+            <button type="submit" name="submitBtn" value="parents" onclick="frm.action='paper.php';frm.target='';return check_mail_to_parents();" title="Αποστολή e-mail στους κηδεμόνες που έχουν καταχωρημένο e-mail" >E-mail ΣΕ ΚΗΔΕΜΟΝΕΣ</button>&nbsp;
+            Κοινοποίηση σε: <input type="checkbox" name="cc_sch" {$chk_sch_email}>σχολείο</input>&nbsp;{if $chk_teacher_email}<input type="checkbox" name="cc_teacher" {$chk_teacher_email}>καθηγητή</input>{/if}
+
         </h4>
         <h4>
             <button type="button" name="exit" value="exit" onclick="window.location='index.php'">ΕΠΙΣΤΡΟΦΗ</button>
