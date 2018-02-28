@@ -49,7 +49,7 @@
             <td><input type="text" name="til1" id="til1" value=""></td>
         </tr>
         <tr>
-            <td align="right">ΤΗΛ2</td>
+            <td align="right">ΚΙΝΗΤΟ</td>
             <td><input type="text" name="til2" id="til2" value=""></td>
         </tr>
         <tr>

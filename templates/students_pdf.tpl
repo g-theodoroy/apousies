@@ -17,7 +17,7 @@
             <th >ΤΚ</th>
             <th >ΠΟΛΗ</th>
             <th >ΤΗΛ1</th>
-            <th >ΤΗΛ2</th>
+            <th >KINHTO</th>
             <th >EMAIL</th>
             {foreach from=$tmimata_def item=tmima}
                 <th width="3%">{$tmima.label}</th>

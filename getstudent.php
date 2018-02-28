@@ -134,7 +134,7 @@ if (count($dataget) > 0)
 $response.="\"></td>
     </tr>
     <tr>
-      <td align=\"right\">ΤΗΛ2</td>
+      <td align=\"right\">KINHTO</td>
       <td><input type=\"text\" name=\"til2\" value=\"";
 if (count($dataget) > 0)
     $response.= $dataget['til2'];

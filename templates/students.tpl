@@ -19,7 +19,7 @@
                     <th width="4%">ΤΚ</th>
                     <th width="5%">ΠΟΛΗ</th>
                     <th width="7%">ΤΗΛ1</th>
-                    <th width="7%">ΤΗΛ2</th>
+                    <th width="7%">KINHTO</th>
                     <th width="7%">EMAIL</th>
                     <th width="2%">ΦΥ<br>ΛΟ</th>
                         {foreach from=$tmimata_def item=tmima}

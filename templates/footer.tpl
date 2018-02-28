@@ -23,7 +23,7 @@
             </div>
             <div class="column span-4 last">
                 <div align="right">
-                    <a href="mailto:infoapousies.gr?subject=Διαχείριση Απουσιών" >GΘ2016</a>
+                    <a href="mailto:infoapousies.gr?subject=Διαχείριση Απουσιών" >GΘ2018</a>
                 </div>
             </div>{*<!--END OF FOOTER-->*}
     </div>{*<!--END OF BODY MAIN BLOCK-->*}
