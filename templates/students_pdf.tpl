@@ -37,7 +37,7 @@
                 <td  title="{$stu.poli}">{$stu.poli}</td>
                 <td align='center' title="{$stu.til1}">{$stu.til1}</td>
                 <td align='center' title="{$stu.til2}">{$stu.til2}</td>
-                <td align='center' title="{$stu.email}">{$stu.email}</td>
+                <td  title="{$stu.email}">{$stu.email}</td>
                 {foreach from=$tmimata_def item=tmima}
                 	{if isset($stu.tmimata.{$tmima.kod})}
                     	<td align='center' title="{$stu.tmimata.{$tmima.kod}}">{$stu.tmimata.{$tmima.kod}}</td>
