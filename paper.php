@@ -404,17 +404,32 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 
 		$totalap = $row ["sumap"];
 		$histam = $row ["am"];
-		$histquery = "INSERT INTO `paperhistory` (`protok`, `mydate`, `am`, `apous`, `user` ) VALUES ('$protok','$histdate','$histam','$totalap','$parent');";
-		$histresult = mysqli_query ( $link, $histquery );
-
-		// echo "$histquery <hr>";
-
-		if (! $histresult) {
-			$errorText = mysqli_error ( $link );
-			echo "1 $errorText<hr>";
+		$email = $row ["email"];
+		$mobile = $row ["til2"];
+		$chk = true;
+		
+		if ($target == "sendsms"){
+            if (! $mobile) $chk = false;
+            if ($smssendto == "sms2mob"){
+                if ($email) $chk = false;
+            }
+        }
+        if ($target == "parents"){
+            if (! $email) $chk = false;
 		}
+		if ($chk){
+            $histquery = "INSERT INTO `paperhistory` (`protok`, `mydate`, `am`, `apous`, `user` ) VALUES ('$protok','$histdate','$histam','$totalap','$parent');";
+            $histresult = mysqli_query ( $link, $histquery );
+		
+            // echo "$histquery <hr>";
 
-		$_SESSION ["havechanges"] = true;
+            if (! $histresult) {
+                $errorText = mysqli_error ( $link );
+                echo "1 $errorText<hr>";
+            }
+
+            $_SESSION ["havechanges"] = true;
+        }
 	}
 
 	if ($protokctrl == 2) {
@@ -438,10 +453,22 @@ while ( $row = mysqli_fetch_assoc ( $result ) ) {
 	}
 
 	if ($protok && $protokctrl > 0) {
-		$protok ++;
-		if (isset ( $newid ))
-			$newid ++;
-	}
+		$chk = true;
+		
+		if ($target == "sendsms"){
+            if (! $mobile) $chk = false;
+            if ($smssendto == "sms2mob"){
+                if ($email) $chk = false;
+            }
+        }
+        if ($target == "parents"){
+            if (! $email) $chk = false;
+		}
+		if ($chk){
+            $protok ++;
+            if (isset ( $newid )) $newid ++;
+        }
+    }
 	$i ++;
 }
 
